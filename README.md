@@ -22,6 +22,9 @@ npm run lint
 npm run build
 ```
 
+GitHub Pages serves the production output from the `gh-pages` branch. This
+branch-based deployment avoids requiring a GitHub Actions runner.
+
 ## Product scope
 
 - Six supplied nursing courses appear on the dashboard.
