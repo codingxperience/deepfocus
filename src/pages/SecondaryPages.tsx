@@ -34,8 +34,8 @@ export function CoursesPage() {
             <article key={course.id} className={course.active ? 'is-active' : ''}>
               <img src={course.image} alt="" />
               <span className="library-list__code">{course.code}</span>
-              <div><h2>{course.title}</h2><p>{course.active ? 'Full five-week course available' : 'Course card only'}</p></div>
-              {course.active ? <button onClick={() => navigate('/courses/pharmacology')}>Open <ArrowRight size={15} /></button> : <span className="quiet-badge">Overview only</span>}
+              <div><h2>{course.title}</h2><p>{course.weeks.length}-week syllabus available</p></div>
+              <button onClick={() => navigate(`/courses/${course.id}`)}>Open <ArrowRight size={15} /></button>
             </article>
           ))}
         </div>
@@ -51,7 +51,7 @@ export function PlanPage() {
       <div className="standard-page">
         <header className="standard-header"><div><span className="eyebrow eyebrow--accent"><CalendarDays size={14} /> Learning plan</span><h1>Five weeks at a glance.</h1><p>The course outline defines the sequence. Choose your own start date and pace.</p></div><button className="button button--quiet">Set a start date</button></header>
         <div className="plan-timeline">
-          {courseWeeks.map((week) => <button key={week.number} onClick={() => navigate(`/courses/pharmacology/modules?week=${week.number}`)}><span className="plan-timeline__number">{String(week.number).padStart(2, '0')}</span><span><small>Week {week.number}</small><strong>{week.title}</strong><p>{week.description}</p></span><ChevronRight size={18} /></button>)}
+          {courseWeeks.map((week) => <button key={week.number} onClick={() => navigate(`/courses/pharmacology-1/modules?week=${week.number}`)}><span className="plan-timeline__number">{String(week.number).padStart(2, '0')}</span><span><small>Week {week.number}</small><strong>{week.title}</strong><p>{week.description}</p></span><ChevronRight size={18} /></button>)}
         </div>
       </div>
     </AppShell>

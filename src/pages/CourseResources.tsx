@@ -1,9 +1,16 @@
 import { BookOpenText, Brain, Clock3, Layers3 } from 'lucide-react'
+import { Navigate, useParams } from 'react-router-dom'
 import { CourseShell } from '../components/CourseShell'
+import { getCourseById } from '../data'
 
 export function CourseResources() {
+  const { courseId } = useParams()
+  const course = getCourseById(courseId)
+
+  if (!course) return <Navigate to="/courses" replace />
+
   return (
-    <CourseShell sectionTitle="Study resources">
+    <CourseShell sectionTitle="Study resources" course={course}>
       <div className="document-page resources-page">
         <header className="document-header"><div><span className="eyebrow eyebrow--accent"><Brain size={14} /> Study deliberately</span><h1>A simple rhythm for deep focus.</h1><p>These are learning-method guides for using the course structure—not invented pharmacology lesson content.</p></div></header>
         <div className="resource-guide-grid">

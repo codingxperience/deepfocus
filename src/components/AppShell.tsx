@@ -20,6 +20,7 @@ import {
 } from 'lucide-react'
 
 import { Brand, CircleMark } from './Brand'
+import { courses } from '../data'
 
 const railItems = [
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -182,11 +183,17 @@ function AccountDrawer({ open, onClose }: { open: boolean; onClose: () => void }
 function SearchDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [query, setQuery] = useState('')
   const navigate = useNavigate()
-  const suggestions = [
-    { label: 'Pharmacology I', helper: 'Course overview', to: '/courses/pharmacology' },
-    { label: 'Pharmacokinetics & Pharmacodynamics', helper: 'Week 05', to: '/courses/pharmacology/modules?week=5' },
-    { label: 'Essential Drugs and Rational Medicine Use', helper: 'Week 03', to: '/courses/pharmacology/modules?week=3' },
-  ].filter((item) => `${item.label} ${item.helper}`.toLowerCase().includes(query.toLowerCase()))
+  const suggestions = courses
+    .flatMap((course) => [
+      { label: course.title, helper: `${course.weeks.length}-week course overview`, to: `/courses/${course.id}` },
+      ...course.weeks.map((week) => ({
+        label: week.title,
+        helper: `${course.title} • Week ${String(week.number).padStart(2, '0')}`,
+        to: `/courses/${course.id}/modules?week=${week.number}`,
+      })),
+    ])
+    .filter((item) => `${item.label} ${item.helper}`.toLowerCase().includes(query.toLowerCase()))
+    .slice(0, 8)
 
   if (!open) return null
   return (

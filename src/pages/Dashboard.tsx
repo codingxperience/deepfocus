@@ -49,7 +49,7 @@ export function Dashboard() {
 
           <div className="course-grid">
             {visibleCourses.map((course, index) => (
-              <CourseCard key={course.id} course={course} index={index} onOpen={() => course.active && navigate('/courses/pharmacology')} />
+              <CourseCard key={course.id} course={course} index={index} onOpen={() => navigate(`/courses/${course.id}`)} />
             ))}
           </div>
 
@@ -79,23 +79,14 @@ function CourseCard({ course, index, onOpen }: { course: Course; index: number; 
         <span className="course-card__code">{course.code}</span>
         <h3>{course.title}</h3>
         <div className="course-card__meta">
-          {course.active ? (
-            <>
-              <span><span className="mini-progress"><i /></span> Course ready</span>
-              <span className="course-card__open">Open course <ArrowRight size={15} /></span>
-            </>
-          ) : (
-            <>
-              <span>Course card</span>
-              <span className="course-card__quiet">Overview only</span>
-            </>
-          )}
+          <span><span className="mini-progress"><i /></span> {course.weeks.length} weeks</span>
+          <span className="course-card__open">Open course <ArrowRight size={15} /></span>
         </div>
       </div>
     </>
   )
 
-  return course.active ? (
+  return course.weeks.length ? (
     <button className="course-card course-card--interactive" onClick={onOpen} aria-label={`Open ${course.title}`}>
       {content}
     </button>
@@ -123,7 +114,7 @@ function LearningPanel() {
             </div>
             <ProgressRing value={0} size={58} />
           </div>
-          <button onClick={() => navigate('/courses/pharmacology')}>
+            <button onClick={() => navigate('/courses/pharmacology-1')}>
             Enter course <ArrowRight size={16} />
           </button>
         </section>
@@ -135,7 +126,7 @@ function LearningPanel() {
           </div>
           <div className="path-list">
             {courseWeeks.slice(0, 4).map((week, index) => (
-              <button key={week.number} onClick={() => navigate(`/courses/pharmacology/modules?week=${week.number}`)}>
+              <button key={week.number} onClick={() => navigate(`/courses/pharmacology-1/modules?week=${week.number}`)}>
                 <span className={`path-list__check${index === 0 ? ' path-list__check--next' : ''}`}>
                   {index === 0 ? <BookOpenCheck size={16} /> : <span>{week.number}</span>}
                 </span>
@@ -147,7 +138,7 @@ function LearningPanel() {
               </button>
             ))}
           </div>
-          <button className="view-all-button" onClick={() => navigate('/courses/pharmacology/modules')}>View all modules <ArrowRight size={15} /></button>
+          <button className="view-all-button" onClick={() => navigate('/courses/pharmacology-1/modules')}>View all modules <ArrowRight size={15} /></button>
         </section>
 
         <section className="study-note">

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { Navigate, useParams, useSearchParams } from 'react-router-dom'
 import {
   BookOpenText,
   Check,
@@ -14,17 +14,20 @@ import {
 } from 'lucide-react'
 
 import { CourseShell } from '../components/CourseShell'
-import { courseWeeks, type CourseWeek, type ModuleItem } from '../data'
-
-const STORAGE_KEY = 'deepfocus-completed-items'
+import { courses, getCourseById, type CourseWeek, type ModuleItem } from '../data'
 
 export function CourseModules() {
   const [searchParams] = useSearchParams()
+  const { courseId } = useParams()
+  const resolvedCourse = getCourseById(courseId)
+  const course = resolvedCourse ?? courses[0]
+  const courseWeeks = course.weeks
+  const storageKey = `deepfocus-completed-items-${course.id}`
   const selectedWeek = Number(searchParams.get('week')) || null
   const [openWeeks, setOpenWeeks] = useState<Set<number>>(() => new Set(selectedWeek ? [selectedWeek] : courseWeeks.map((week) => week.number)))
   const [completed, setCompleted] = useState<Set<string>>(() => {
     try {
-      return new Set(JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '[]') as string[])
+      return new Set(JSON.parse(localStorage.getItem(storageKey) ?? '[]') as string[])
     } catch {
       return new Set()
     }
@@ -32,8 +35,8 @@ export function CourseModules() {
   const [selectedItem, setSelectedItem] = useState<{ week: CourseWeek; item: ModuleItem } | null>(null)
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify([...completed]))
-  }, [completed])
+    localStorage.setItem(storageKey, JSON.stringify([...completed]))
+  }, [completed, storageKey])
 
   useEffect(() => {
     if (selectedWeek) {
@@ -57,14 +60,16 @@ export function CourseModules() {
     })
   }
 
+  if (!resolvedCourse) return <Navigate to="/courses" replace />
+
   return (
-    <CourseShell sectionTitle="Modules">
+    <CourseShell sectionTitle="Modules" course={course}>
       <div className="modules-page">
         <header className="modules-header">
           <div>
-            <span className="eyebrow eyebrow--accent"><Sparkles size={14} /> Course modules</span>
-            <h1>Introduction to Pharmacology</h1>
-            <p>Move through the five topics in order. Each week follows the same quiet rhythm: prepare, learn, then check your recall.</p>
+            <span className="eyebrow eyebrow--accent"><Sparkles size={14} /> {course.code} course modules</span>
+            <h1>{course.title}</h1>
+            <p>Move through the {course.weeks.length} syllabus units in order. Each week follows the same quiet rhythm: prepare, learn, then check your recall.</p>
           </div>
           <div className="modules-progress">
             <div className="modules-progress__top"><span>{progressLabel}</span><strong>{progress}%</strong></div>
@@ -91,7 +96,7 @@ export function CourseModules() {
           </button>
           <div className="module-items">
             <ResourceItem icon={GraduationCap} label="How to use this revision course" helper="Course orientation" />
-            <ResourceItem icon={FileText} label="Introduction to Pharmacology outline" helper="Supplied course outline" />
+            <ResourceItem icon={FileText} label={`${course.title} outline`} helper="Supplied examination syllabus" />
             <ResourceItem icon={BookOpenText} label="A focused study rhythm" helper="Prepare • Learn • Check" />
           </div>
         </section>

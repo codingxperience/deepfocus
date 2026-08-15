@@ -770,6 +770,31 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
 .source-preview img { width: 100%; margin-top: 13px; border: 1px solid var(--line); }
 
+.source-preview__document {
+  min-height: 300px;
+  margin-top: 13px;
+  padding: 30px 22px;
+  border: 1px solid var(--line);
+  background: #fbfaf6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.source-preview__document small { color: var(--ink-soft); font-size: 9px; font-weight: 800; line-height: 1.5; text-transform: uppercase; }
+
+.source-preview__document strong { margin-top: 26px; font-family: 'Manrope', sans-serif; font-size: 19px; }
+
+.source-preview__document > span { margin-top: 4px; color: var(--ink-faint); font-size: 10px; }
+
+.source-preview__document i { width: 42px; margin: 26px 0; border-top: 2px solid var(--violet); }
+
+.source-preview__document b { color: var(--violet-dark); font-size: 10px; text-transform: uppercase; }
+
+.source-preview__document p { margin: 8px 0 0; color: var(--ink); font-size: 11px; font-weight: 700; }
+
 .source-preview p { margin: 15px 0 0; color: var(--ink-soft); font-size: 10px; line-height: 1.55; }
 
 .resource-guide-grid { margin-top: 48px; display: grid; grid-template-columns: repeat(3,1fr); gap: 15px; }

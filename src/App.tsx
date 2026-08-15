@@ -21,10 +21,10 @@ export default function App() {
       <Route path="/" element={<Navigate to="/dashboard" replace />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/courses" element={<CoursesPage />} />
-      <Route path="/courses/pharmacology" element={<CourseOverview />} />
-      <Route path="/courses/pharmacology/modules" element={<CourseModules />} />
-      <Route path="/courses/pharmacology/outline" element={<CourseOutline />} />
-      <Route path="/courses/pharmacology/resources" element={<CourseResources />} />
+      <Route path="/courses/:courseId" element={<CourseOverview />} />
+      <Route path="/courses/:courseId/modules" element={<CourseModules />} />
+      <Route path="/courses/:courseId/outline" element={<CourseOutline />} />
+      <Route path="/courses/:courseId/resources" element={<CourseResources />} />
       <Route path="/calendar" element={<PlanPage />} />
       <Route path="/inbox" element={<InboxPage />} />
       <Route path="/profile" element={<ProfilePage />} />

@@ -11,30 +11,32 @@ import {
 } from 'lucide-react'
 
 import { AppShell } from './AppShell'
+import type { Course } from '../data'
 
 type CourseShellProps = {
   children: ReactNode
   sectionTitle: string
+  course: Course
 }
 
-const links = [
-  { to: '/courses/pharmacology', label: 'Overview', icon: Home, end: true },
-  { to: '/courses/pharmacology/modules', label: 'Modules', icon: BookMarked },
-  { to: '/courses/pharmacology/outline', label: 'Course outline', icon: FileText },
-  { to: '/courses/pharmacology/resources', label: 'Study resources', icon: BookOpenText },
-]
-
-export function CourseShell({ children, sectionTitle }: CourseShellProps) {
+export function CourseShell({ children, sectionTitle, course }: CourseShellProps) {
   const navigate = useNavigate()
+  const coursePath = `/courses/${course.id}`
+  const links = [
+    { to: coursePath, label: 'Overview', icon: Home, end: true },
+    { to: `${coursePath}/modules`, label: 'Modules', icon: BookMarked },
+    { to: `${coursePath}/outline`, label: 'Course outline', icon: FileText },
+    { to: `${coursePath}/resources`, label: 'Study resources', icon: BookOpenText },
+  ]
   return (
-    <AppShell pageTitle={sectionTitle} pageEyebrow="PHA 301 • Pharmacology I" courseContext>
+    <AppShell pageTitle={sectionTitle} pageEyebrow={`Year 2 • Semester 1 • ${course.title}`} courseContext>
       <div className="course-layout">
         <aside className="course-nav" aria-label="Pharmacology course navigation">
           <div className="course-nav__top">
             <button className="back-link" onClick={() => navigate('/dashboard')}><ArrowLeft size={16} /> Dashboard</button>
             <div className="course-nav__identity">
-              <span className="course-nav__monogram">PH</span>
-              <div><span>Course</span><strong>Pharmacology I</strong></div>
+              <span className="course-nav__monogram">{course.title.split(' ').map((word) => word[0]).join('').slice(0, 2).toUpperCase()}</span>
+              <div><span>{course.code}</span><strong>{course.title}</strong></div>
               <ChevronDown size={16} />
             </div>
           </div>
@@ -50,8 +52,8 @@ export function CourseShell({ children, sectionTitle }: CourseShellProps) {
             })}
           </nav>
           <div className="course-nav__footer">
-            <span>Course preview</span>
-            <p>Content follows the supplied course outline.</p>
+            <span>Examination syllabus</span>
+            <p>Content follows the supplied Year 2 Semester 1 outline.</p>
             <button aria-label="Collapse course navigation"><PanelLeftClose size={18} /> Collapse</button>
           </div>
         </aside>
