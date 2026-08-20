@@ -389,7 +389,9 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .dashboard-footer p { margin: 0; }
 
 /* Drawers and search */
-.drawer-scrim, .mobile-scrim { position: fixed; inset: 0; z-index: 70; border: 0; background: rgba(22,20,43,0.5); backdrop-filter: blur(2px); }
+.drawer-scrim { position: fixed; inset: 0; z-index: 0; border: 0; background: rgba(22,20,43,0.22); }
+
+.mobile-scrim { position: fixed; inset: 0; z-index: 50; border: 0; background: rgba(22,20,43,0.34); }
 
 .account-drawer { position: fixed; z-index: 80; inset: 0 auto 0 0; width: min(420px, calc(100vw - 24px)); padding: 24px; background: white; box-shadow: var(--shadow-md); transform: translateX(-102%); transition: transform 260ms cubic-bezier(.22,.8,.24,1); }
 
@@ -1092,6 +1094,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
 .utility-drawer {
   position: absolute;
+  z-index: 1;
   inset: 0 auto 0 var(--rail);
   width: min(386px, calc(100vw - var(--rail) - 22px));
   overflow-y: auto;
