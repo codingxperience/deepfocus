@@ -56,7 +56,7 @@ export function CourseOverview() {
               <p className="welcome-block__lead">{course.introduction}</p>
               <div className="principle-grid">
                 <div><span>01</span><strong>Learn the language</strong><p>Build the vocabulary that makes later concepts easier to understand.</p></div>
-                <div><span>02</span><strong>Connect the system</strong><p>See how sources, use, classification, movement, and effect fit together.</p></div>
+                <div><span>02</span><strong>Connect the weekly themes</strong><p>See how each topic strengthens the next instead of treating the outline as isolated facts.</p></div>
                 <div><span>03</span><strong>Check your recall</strong><p>End every week by retrieving the ideas that matter most.</p></div>
               </div>
             </section>

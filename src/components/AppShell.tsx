@@ -1,6 +1,7 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import {
+  Accessibility,
   Bell,
   BookOpen,
   CalendarDays,
@@ -8,18 +9,26 @@ import {
   CircleHelp,
   Clock3,
   Command,
+  FileText,
+  FolderOpen,
+  Globe2,
   GraduationCap,
   History,
   Inbox,
   LayoutDashboard,
+  LogOut,
+  Map,
   Menu,
+  MessageCircleQuestion,
   Search,
   Settings,
+  Sparkles,
   UserRound,
   X,
 } from 'lucide-react'
 
-import { Brand, CircleMark } from './Brand'
+import { CircleMark } from './Brand'
+import { getRecentActivity, recordRecentActivity, relativeActivityTime, type RecentActivity } from '../activity'
 import { courses } from '../data'
 
 const railItems = [
@@ -29,6 +38,8 @@ const railItems = [
   { to: '/inbox', label: 'Inbox', icon: Inbox, badge: 2 },
 ]
 
+type DrawerKind = 'account' | 'history' | 'help' | null
+
 type AppShellProps = {
   children: ReactNode
   pageTitle: string
@@ -37,17 +48,32 @@ type AppShellProps = {
 }
 
 export function AppShell({ children, pageTitle, pageEyebrow, courseContext = false }: AppShellProps) {
-  const [accountOpen, setAccountOpen] = useState(false)
+  const [drawer, setDrawer] = useState<DrawerKind>(null)
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
+  const [highContrast, setHighContrast] = useState(false)
+  const [dyslexiaFont, setDyslexiaFont] = useState(false)
   const location = useLocation()
   const navigate = useNavigate()
 
   useEffect(() => {
     setMobileNavOpen(false)
     setSearchOpen(false)
+    if (location.pathname === '/history') setDrawer('history')
+    if (location.pathname === '/help') setDrawer('help')
     window.scrollTo({ top: 0, behavior: 'instant' })
-  }, [location.pathname])
+    recordRecentActivity({ path: location.pathname, label: pageTitle, context: pageEyebrow })
+  }, [location.pathname, pageEyebrow, pageTitle])
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('high-contrast', highContrast)
+    return () => document.documentElement.classList.remove('high-contrast')
+  }, [highContrast])
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dyslexia-font', dyslexiaFont)
+    return () => document.documentElement.classList.remove('dyslexia-font')
+  }, [dyslexiaFont])
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -57,7 +83,7 @@ export function AppShell({ children, pageTitle, pageEyebrow, courseContext = fal
       }
       if (event.key === 'Escape') {
         setSearchOpen(false)
-        setAccountOpen(false)
+        setDrawer(null)
         setMobileNavOpen(false)
       }
     }
@@ -73,8 +99,8 @@ export function AppShell({ children, pageTitle, pageEyebrow, courseContext = fal
         </button>
 
         <nav className="global-rail__nav">
-          <button className="rail-link rail-link--account" onClick={() => setAccountOpen(true)} aria-label="Open account">
-            <span className="avatar avatar--rail">DF</span>
+          <button className="rail-link rail-link--account" onClick={() => setDrawer('account')} aria-label="Open account">
+            <span className="avatar avatar--rail">FO</span>
             <span>Account</span>
           </button>
           {railItems.map((item) => {
@@ -96,11 +122,11 @@ export function AppShell({ children, pageTitle, pageEyebrow, courseContext = fal
         </nav>
 
         <div className="global-rail__footer">
-          <NavLink to="/history" className="rail-link">
+          <button className="rail-link" onClick={() => setDrawer('history')}>
             <History size={21} strokeWidth={1.8} />
             <span>History</span>
-          </NavLink>
-          <button className="rail-link" onClick={() => navigate('/help')}>
+          </button>
+          <button className="rail-link" onClick={() => setDrawer('help')}>
             <CircleHelp size={21} strokeWidth={1.8} />
             <span>Help</span>
           </button>
@@ -128,10 +154,10 @@ export function AppShell({ children, pageTitle, pageEyebrow, courseContext = fal
               <Bell size={19} />
               <span className="notification-dot" />
             </button>
-            <button className="topbar__account" onClick={() => setAccountOpen(true)} aria-label="Open your account">
-              <span className="avatar">DF</span>
+            <button className="topbar__account" onClick={() => setDrawer('account')} aria-label="Open your account">
+              <span className="avatar">FO</span>
               <span className="topbar__account-text">
-                <strong>Learner</strong>
+                <strong>Fred Okorio</strong>
                 <small>Revision space</small>
               </span>
               <ChevronRight size={15} />
@@ -141,43 +167,118 @@ export function AppShell({ children, pageTitle, pageEyebrow, courseContext = fal
         <main>{children}</main>
       </div>
 
-      <AccountDrawer open={accountOpen} onClose={() => setAccountOpen(false)} />
+      <UtilityDrawer
+        kind={drawer}
+        onClose={() => setDrawer(null)}
+        onNavigate={(path) => { navigate(path); setDrawer(null) }}
+        highContrast={highContrast}
+        dyslexiaFont={dyslexiaFont}
+        onToggleHighContrast={() => setHighContrast((current) => !current)}
+        onToggleDyslexiaFont={() => setDyslexiaFont((current) => !current)}
+      />
       <SearchDialog open={searchOpen} onClose={() => setSearchOpen(false)} />
     </div>
   )
 }
 
-function AccountDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const navigate = useNavigate()
+type UtilityDrawerProps = {
+  kind: DrawerKind
+  onClose: () => void
+  onNavigate: (path: string) => void
+  highContrast: boolean
+  dyslexiaFont: boolean
+  onToggleHighContrast: () => void
+  onToggleDyslexiaFont: () => void
+}
+
+function UtilityDrawer({ kind, onClose, onNavigate, highContrast, dyslexiaFont, onToggleHighContrast, onToggleDyslexiaFont }: UtilityDrawerProps) {
+  if (!kind) return null
+  const title = kind === 'account' ? 'Account' : kind === 'history' ? 'Recent history' : 'Help'
   return (
-    <>
-      {open && <button className="drawer-scrim" onClick={onClose} aria-label="Dismiss account panel" />}
-      <aside className={`account-drawer${open ? ' account-drawer--open' : ''}`} aria-hidden={!open} aria-label="Account panel">
-        <div className="account-drawer__header">
-          <Brand />
-          <button className="icon-button" onClick={onClose} aria-label="Close account panel"><X size={19} /></button>
-        </div>
-        <div className="account-card">
-          <span className="avatar avatar--large">DF</span>
-          <div>
-            <span className="eyebrow">Learning profile</span>
-            <h2>Your revision space</h2>
-            <p>Add your name and study preferences when you are ready.</p>
-          </div>
-        </div>
-        <nav className="account-links">
-          <button onClick={() => { navigate('/profile'); onClose() }}><UserRound size={19} /><span><strong>Profile</strong><small>Personal details and study preferences</small></span><ChevronRight size={17} /></button>
-          <button onClick={() => { navigate('/courses'); onClose() }}><GraduationCap size={19} /><span><strong>My courses</strong><small>Your six nursing revision spaces</small></span><ChevronRight size={17} /></button>
-          <button onClick={() => { navigate('/history'); onClose() }}><Clock3 size={19} /><span><strong>Learning history</strong><small>Return to recently opened topics</small></span><ChevronRight size={17} /></button>
-          <button onClick={() => { navigate('/settings'); onClose() }}><Settings size={19} /><span><strong>Settings</strong><small>Accessibility and focus preferences</small></span><ChevronRight size={17} /></button>
-        </nav>
-        <div className="account-drawer__note">
-          <span className="status-dot" />
-          <div><strong>Local preview</strong><p>Your progress is kept in this browser for this prototype.</p></div>
-        </div>
+    <div className="utility-drawer-layer" role="dialog" aria-modal="true" aria-label={title}>
+      <button className="drawer-scrim utility-drawer__scrim" onClick={onClose} aria-label={`Close ${title}`} />
+      <aside className="utility-drawer">
+        <header className="utility-drawer__header">
+          <div>{kind !== 'account' && <span className="eyebrow">DeepFocus revision</span>}<h2>{title}</h2></div>
+          <button className="utility-drawer__close" onClick={onClose} aria-label={`Close ${title}`}><X size={20} /></button>
+        </header>
+        {kind === 'account' && <AccountPanel onNavigate={onNavigate} highContrast={highContrast} dyslexiaFont={dyslexiaFont} onToggleHighContrast={onToggleHighContrast} onToggleDyslexiaFont={onToggleDyslexiaFont} />}
+        {kind === 'history' && <HistoryPanel onNavigate={onNavigate} />}
+        {kind === 'help' && <HelpPanel onNavigate={onNavigate} />}
       </aside>
-    </>
+    </div>
   )
+}
+
+function AccountPanel({ onNavigate, highContrast, dyslexiaFont, onToggleHighContrast, onToggleDyslexiaFont }: Omit<UtilityDrawerProps, 'kind' | 'onClose'>) {
+  return (
+    <div className="account-panel">
+      <div className="account-panel__identity">
+        <span className="avatar avatar--profile">FO</span>
+        <h3>Fred Okorio</h3>
+        <p>DeepFocus learner</p>
+        <button className="account-panel__logout" type="button"><LogOut size={14} /> Log out</button>
+      </div>
+      <nav className="account-panel__links" aria-label="Account links">
+        <AccountLink icon={Bell} label="Notifications" helper="Learning updates" onClick={() => onNavigate('/inbox')} />
+        <AccountLink icon={UserRound} label="Profile" helper="Details and study preferences" onClick={() => onNavigate('/profile')} />
+        <AccountLink icon={FolderOpen} label="Course files" helper="Your supplied outlines" onClick={() => onNavigate('/courses')} />
+        <AccountLink icon={Settings} label="Settings" helper="Focus and accessibility" onClick={() => onNavigate('/settings')} />
+        <AccountLink icon={GraduationCap} label="Portfolio" helper="Your learning space" onClick={() => onNavigate('/profile')} />
+        <AccountLink icon={MessageCircleQuestion} label="Mobile companion" helper="No sign-in required in preview" onClick={() => onNavigate('/help')} />
+        <AccountLink icon={Globe2} label="Learning notices" helper="Course updates live in Inbox" onClick={() => onNavigate('/inbox')} />
+      </nav>
+      <section className="account-panel__accessibility" aria-labelledby="accessibility-title">
+        <div><Accessibility size={18} /><h3 id="accessibility-title">Accessibility</h3></div>
+        <AccessibilityToggle label="High contrast interface" active={highContrast} onClick={onToggleHighContrast} />
+        <AccessibilityToggle label="Dyslexia-friendly letter spacing" active={dyslexiaFont} onClick={onToggleDyslexiaFont} />
+      </section>
+    </div>
+  )
+}
+
+function AccountLink({ icon: Icon, label, helper, onClick }: { icon: typeof Bell; label: string; helper: string; onClick: () => void }) {
+  return <button onClick={onClick}><Icon size={18} /><span><strong>{label}</strong><small>{helper}</small></span><ChevronRight size={16} /></button>
+}
+
+function AccessibilityToggle({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
+  return <button className="account-toggle" onClick={onClick} aria-pressed={active}><span>{label}</span><i className={active ? 'is-active' : ''}><b /></i></button>
+}
+
+function HistoryPanel({ onNavigate }: { onNavigate: (path: string) => void }) {
+  const [activities, setActivities] = useState<RecentActivity[]>(() => getRecentActivity())
+  useEffect(() => {
+    const refresh = () => setActivities(getRecentActivity())
+    window.addEventListener('deepfocus-activity-change', refresh)
+    return () => window.removeEventListener('deepfocus-activity-change', refresh)
+  }, [])
+  return (
+    <div className="history-panel">
+      <p className="utility-drawer__lead">Return to exactly where you were studying. This list is saved only in this browser.</p>
+      {activities.length ? <div className="history-panel__list">{activities.map((activity) => <ActivityButton key={activity.id} activity={activity} onClick={() => onNavigate(activity.path)} />)}</div> : <EmptyDrawerState icon={Clock3} title="Nothing to revisit yet" copy="Open a course or a weekly module and it will appear here." />}
+    </div>
+  )
+}
+
+function ActivityButton({ activity, onClick }: { activity: RecentActivity; onClick: () => void }) {
+  const Icon = activity.path.includes('modules') ? BookOpen : activity.path === '/calendar' ? CalendarDays : activity.path === '/inbox' ? Inbox : activity.path === '/dashboard' ? LayoutDashboard : FileText
+  return <button className="activity-button" onClick={onClick}><span className="activity-button__icon"><Icon size={16} /></span><span><strong>{activity.label}</strong><small>{activity.context || 'DeepFocus revision'} · {relativeActivityTime(activity.visitedAt)}</small></span><ChevronRight size={16} /></button>
+}
+
+function HelpPanel({ onNavigate }: { onNavigate: (path: string) => void }) {
+  return (
+    <div className="help-panel">
+      <div className="help-panel__illustration" aria-hidden="true"><Map size={58} /><span /><i /><b /></div>
+      <div className="help-panel__intro"><span className="eyebrow eyebrow--accent"><Sparkles size={13} /> Start here</span><h3>Find your way, one focused step at a time.</h3><p>DeepFocus keeps the supplied nursing outline visible without adding invented lessons or dates.</p></div>
+      <button className="help-panel__primary" onClick={() => onNavigate('/courses')}><BookOpen size={18} /><span><strong>Browse your courses</strong><small>Open a course and choose a weekly module</small></span><ChevronRight size={17} /></button>
+      <section className="help-panel__resources"><span className="eyebrow">Useful paths</span><button onClick={() => onNavigate('/courses/pharmacology-1/modules?week=1')}>Start Pharmacology I <ChevronRight size={15} /></button><button onClick={() => onNavigate('/calendar')}>Plan a focus block <ChevronRight size={15} /></button><button onClick={() => onNavigate('/settings')}>Adjust accessibility <ChevronRight size={15} /></button></section>
+      <p className="help-panel__note">Need course material that is not in the outline? Keep the study structure here, then add your own verified notes.</p>
+    </div>
+  )
+}
+
+function EmptyDrawerState({ icon: Icon, title, copy }: { icon: typeof Clock3; title: string; copy: string }) {
+  return <div className="utility-empty"><span><Icon size={24} /></span><h3>{title}</h3><p>{copy}</p></div>
 }
 
 function SearchDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
@@ -188,7 +289,7 @@ function SearchDialog({ open, onClose }: { open: boolean; onClose: () => void })
       { label: course.title, helper: `${course.weeks.length}-week course overview`, to: `/courses/${course.id}` },
       ...course.weeks.map((week) => ({
         label: week.title,
-        helper: `${course.title} • Week ${String(week.number).padStart(2, '0')}`,
+        helper: `${course.title} · Week ${String(week.number).padStart(2, '0')}`,
         to: `/courses/${course.id}/modules?week=${week.number}`,
       })),
     ])
@@ -208,14 +309,14 @@ function SearchDialog({ open, onClose }: { open: boolean; onClose: () => void })
         <div className="search-panel__body">
           <span className="eyebrow">{query ? 'Matching results' : 'Quick access'}</span>
           {suggestions.length ? suggestions.map((item) => (
-            <button key={item.label} onClick={() => { navigate(item.to); onClose() }}>
+            <button key={`${item.label}-${item.to}`} onClick={() => { navigate(item.to); onClose() }}>
               <span className="search-result__icon"><Search size={16} /></span>
               <span><strong>{item.label}</strong><small>{item.helper}</small></span>
               <ChevronRight size={17} />
             </button>
           )) : <p className="search-empty">No course or topic matches “{query}”.</p>}
         </div>
-        <div className="search-panel__footer"><span>Searches course titles and the supplied pharmacology outline.</span><span><kbd>↑</kbd><kbd>↓</kbd> to navigate</span></div>
+        <div className="search-panel__footer"><span>Searches the verified course titles and weekly topics.</span><span><kbd>Ctrl</kbd><kbd>K</kbd> to open</span></div>
       </div>
     </div>
   )

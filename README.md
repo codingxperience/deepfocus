@@ -28,7 +28,7 @@ branch-based deployment avoids requiring a GitHub Actions runner.
 ## Product scope
 
 - Six supplied nursing courses appear on the dashboard.
-- Pharmacology I contains the full five-week course structure derived from the supplied outline.
-- The other five courses intentionally remain overview-only cards.
-- Module completion is a frontend preview stored in the current browser.
-- No unsupported lesson material, teacher identity, deadlines, or academic progress is fabricated.
+- Every supplied nursing course has a weekly module path drawn from its supplied outline.
+- Module completion, recent history, accessibility choices, and personal calendar blocks are local browser-only preview state.
+- Inbox and calendar views are fully interactive interface previews; they do not send messages or create institutional deadlines.
+- No unsupported lesson material, external teacher identity, deadlines, or academic progress is fabricated.
