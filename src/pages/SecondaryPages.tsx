@@ -29,6 +29,7 @@ import {
 import { getRecentActivity, relativeActivityTime, type RecentActivity } from '../activity'
 import { AppShell } from '../components/AppShell'
 import { courses } from '../data'
+import { applyInterfacePreference, getInterfacePreference } from '../preferences'
 
 export function CoursesPage() {
   const navigate = useNavigate()
@@ -251,16 +252,16 @@ export function ProfilePage() {
 }
 
 export function SettingsPage() {
-  const [largeType, setLargeType] = useState(false)
-  const [reducedMotion, setReducedMotion] = useState(false)
+  const [largeType, setLargeType] = useState(() => getInterfacePreference('largeType'))
+  const [reducedMotion, setReducedMotion] = useState(() => getInterfacePreference('reducedMotion'))
   return (
     <AppShell pageTitle="Settings">
       <div className="standard-page settings-page">
         <header className="standard-header"><div><span className="eyebrow eyebrow--accent"><Settings size={14} /> Preferences</span><h1>Make DeepFocus yours.</h1><p>Simple controls for a calmer, more accessible study environment.</p></div></header>
         <section className="settings-card">
           <div className="settings-card__heading"><h2>Accessibility</h2><p>These preferences affect this browser preview.</p></div>
-          <SettingRow icon={Type} title="Larger interface text" helper="Increase the base reading size." active={largeType} onToggle={() => { setLargeType(!largeType); document.documentElement.classList.toggle('large-type') }} />
-          <SettingRow icon={Clock3} title="Reduce motion" helper="Minimise interface movement and transitions." active={reducedMotion} onToggle={() => { setReducedMotion(!reducedMotion); document.documentElement.classList.toggle('reduce-motion') }} />
+          <SettingRow icon={Type} title="Larger interface text" helper="Increase the base reading size." active={largeType} onToggle={() => { const next = !largeType; setLargeType(next); applyInterfacePreference('largeType', next) }} />
+          <SettingRow icon={Clock3} title="Reduce motion" helper="Minimise interface movement and transitions." active={reducedMotion} onToggle={() => { const next = !reducedMotion; setReducedMotion(next); applyInterfacePreference('reducedMotion', next) }} />
         </section>
       </div>
     </AppShell>

@@ -30,5 +30,6 @@ branch-based deployment avoids requiring a GitHub Actions runner.
 - Six supplied nursing courses appear on the dashboard.
 - Every supplied nursing course has a weekly module path drawn from its supplied outline.
 - Module completion, recent history, accessibility choices, and personal calendar blocks are local browser-only preview state.
+- The account space includes a study vault, private notes, local notice preferences, accessible display controls, safe device-link sharing, and capability updates.
 - Inbox and calendar views are fully interactive interface previews; they do not send messages or create institutional deadlines.
 - No unsupported lesson material, external teacher identity, deadlines, or academic progress is fabricated.

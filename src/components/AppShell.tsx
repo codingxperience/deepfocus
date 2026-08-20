@@ -30,6 +30,7 @@ import {
 import { CircleMark } from './Brand'
 import { getRecentActivity, recordRecentActivity, relativeActivityTime, type RecentActivity } from '../activity'
 import { courses } from '../data'
+import { applyInterfacePreference, getInterfacePreference, preferenceEvent, type InterfacePreference } from '../preferences'
 
 const railItems = [
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -51,8 +52,8 @@ export function AppShell({ children, pageTitle, pageEyebrow, courseContext = fal
   const [drawer, setDrawer] = useState<DrawerKind>(null)
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
-  const [highContrast, setHighContrast] = useState(false)
-  const [dyslexiaFont, setDyslexiaFont] = useState(false)
+  const [highContrast, setHighContrast] = useState(() => getInterfacePreference('highContrast'))
+  const [dyslexiaFont, setDyslexiaFont] = useState(() => getInterfacePreference('dyslexiaFont'))
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -66,14 +67,22 @@ export function AppShell({ children, pageTitle, pageEyebrow, courseContext = fal
   }, [location.pathname, pageEyebrow, pageTitle])
 
   useEffect(() => {
-    document.documentElement.classList.toggle('high-contrast', highContrast)
-    return () => document.documentElement.classList.remove('high-contrast')
+    applyInterfacePreference('highContrast', highContrast)
   }, [highContrast])
 
   useEffect(() => {
-    document.documentElement.classList.toggle('dyslexia-font', dyslexiaFont)
-    return () => document.documentElement.classList.remove('dyslexia-font')
+    applyInterfacePreference('dyslexiaFont', dyslexiaFont)
   }, [dyslexiaFont])
+
+  useEffect(() => {
+    const syncPreference = (event: Event) => {
+      const detail = (event as CustomEvent<{ preference: InterfacePreference; active: boolean }>).detail
+      if (detail?.preference === 'highContrast') setHighContrast(detail.active)
+      if (detail?.preference === 'dyslexiaFont') setDyslexiaFont(detail.active)
+    }
+    window.addEventListener(preferenceEvent, syncPreference)
+    return () => window.removeEventListener(preferenceEvent, syncPreference)
+  }, [])
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -220,13 +229,13 @@ function AccountPanel({ onNavigate, highContrast, dyslexiaFont, onToggleHighCont
         <button className="account-panel__logout" type="button"><LogOut size={14} /> Log out</button>
       </div>
       <nav className="account-panel__links" aria-label="Account links">
-        <AccountLink icon={Bell} label="Notifications" helper="Learning updates" onClick={() => onNavigate('/inbox')} />
+        <AccountLink icon={Bell} label="Study notices" helper="Local reminder preferences" onClick={() => onNavigate('/account/notices')} />
         <AccountLink icon={UserRound} label="Profile" helper="Details and study preferences" onClick={() => onNavigate('/profile')} />
-        <AccountLink icon={FolderOpen} label="Course files" helper="Your supplied outlines" onClick={() => onNavigate('/courses')} />
-        <AccountLink icon={Settings} label="Settings" helper="Focus and accessibility" onClick={() => onNavigate('/settings')} />
+        <AccountLink icon={FolderOpen} label="Study vault" helper="Your course maps and personal notes" onClick={() => onNavigate('/account/vault')} />
+        <AccountLink icon={Settings} label="Preferences" helper="Focus and accessibility" onClick={() => onNavigate('/account/preferences')} />
         <AccountLink icon={GraduationCap} label="Portfolio" helper="Your learning space" onClick={() => onNavigate('/profile')} />
-        <AccountLink icon={MessageCircleQuestion} label="Mobile companion" helper="No sign-in required in preview" onClick={() => onNavigate('/help')} />
-        <AccountLink icon={Globe2} label="Learning notices" helper="Course updates live in Inbox" onClick={() => onNavigate('/inbox')} />
+        <AccountLink icon={MessageCircleQuestion} label="Mobile companion" helper="Open DeepFocus on another device" onClick={() => onNavigate('/account/mobile')} />
+        <AccountLink icon={Globe2} label="Workspace updates" helper="What is currently available" onClick={() => onNavigate('/account/updates')} />
       </nav>
       <section className="account-panel__accessibility" aria-labelledby="accessibility-title">
         <div><Accessibility size={18} /><h3 id="accessibility-title">Accessibility</h3></div>
