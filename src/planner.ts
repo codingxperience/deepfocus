@@ -25,6 +25,42 @@ const storageKey = 'deepfocus-study-planner-v2'
 const legacyStorageKey = 'deepfocus-clinical-pathway-plan-v1'
 export const plannerChangeEvent = 'deepfocus-study-planner-change'
 
+// Version 2 initially mirrored composite lines from the supplied outlines. DeepFocus
+// now lets learners select each named subject separately while keeping the original
+// outline code as the visible reference. Expand an earlier saved selection so no one
+// loses the revision subjects they had already chosen.
+const legacyCompositeUnitSelections: Partial<Record<PathwayId, Record<string, string[]>>> = {
+  nursing: {
+    cn111: ['cn111-anatomy-physiology-1', 'cn111-first-aid'],
+    cn112: ['cn112-foundations-nursing-1', 'cn112-computer'],
+    cn113: ['cn113-personal-communal-health', 'cn113-microbiology'],
+    cn122: ['cn122-foundations-nursing-2', 'cn122-sociology', 'cn122-psychology'],
+    cn211: ['cn211-medical-nursing-1', 'cn211-pharmacology-1'],
+    cn212: ['cn212-surgical-nursing-1', 'cn212-gynaecologic-nursing'],
+    cn213: ['cn213-paediatric-nursing-1', 'cn213-palliative-care'],
+    cn221: ['cn221-medical-nursing-2', 'cn221-pharmacology-2'],
+    cn222: ['cn222-surgical-nursing-2', 'cn222-paediatric-nursing-2'],
+    cn223: ['cn223-mental-health-nursing', 'cn223-occupational-health'],
+    cn311: ['cn311-tropical-medicine', 'cn311-surgical-nursing-3'],
+    cn312: ['cn312-reproductive-health', 'cn312-guidance-counselling'],
+    cn313: ['cn313-health-services-management', 'cn313-entrepreneurship'],
+  },
+  midwifery: {
+    cm111: ['cm111-anatomy-physiology-1', 'cm111-first-aid'],
+    cm112: ['cm112-foundations-nursing-1', 'cm112-basic-computer'],
+    cm113: ['cm113-personal-communal-health', 'cm113-microbiology'],
+    cm122: ['cm122-foundations-nursing-2', 'cm122-sociology', 'cm122-psychology'],
+    cm212: ['cm212-midwifery-1', 'cm212-pharmacology-1'],
+    cm213: ['cm213-paediatric-nursing-1', 'cm213-palliative-care-nursing'],
+    cm221: ['cm221-midwifery-2', 'cm221-tropical-medicine'],
+    cm222: ['cm222-paediatric-nursing-2', 'cm222-pharmacology-2'],
+    cm223: ['cm223-community-health', 'cm223-occupational-health-safety'],
+    cm311: ['cm311-gynaecology', 'cm311-reproductive-health'],
+    cm312: ['cm312-mental-health', 'cm312-guidance-counselling'],
+    cm313: ['cm313-health-services-management', 'cm313-entrepreneurship'],
+  },
+}
+
 function createPathwayPlan(pathway: StudyPathway): PathwayPlan {
   return {
     entryTermId: pathway.terms[0].id,
@@ -54,9 +90,10 @@ function normalisePlan(pathway: StudyPathway, value: Partial<PathwayPlan> | unde
   const fallback = createPathwayPlan(pathway)
   const termIds = new Set(pathway.terms.map((term) => term.id))
   const unitIds = new Set(pathway.units.map((unit) => unit.id))
-  const registeredUnitIds = Array.isArray(value?.registeredUnitIds)
-    ? [...new Set(value.registeredUnitIds.filter((id): id is string => typeof id === 'string' && unitIds.has(id)))]
+  const savedUnitIds = Array.isArray(value?.registeredUnitIds)
+    ? value.registeredUnitIds.filter((id): id is string => typeof id === 'string')
     : []
+  const registeredUnitIds = [...new Set(savedUnitIds.flatMap((id) => legacyCompositeUnitSelections[pathway.id]?.[id] ?? [id]).filter((id) => unitIds.has(id)))]
   const firstRegisteredUnit = pathway.units.find((unit) => registeredUnitIds.includes(unit.id))
   const firstRegisteredTermId = firstRegisteredUnit
     ? pathway.terms.find((term) => term.year === firstRegisteredUnit.year && term.semester === firstRegisteredUnit.semester)?.id

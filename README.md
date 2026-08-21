@@ -27,11 +27,11 @@ branch-based deployment avoids requiring a GitHub Actions runner.
 
 ## Product scope
 
-- The dashboard is a deliberately calm, current-term study space: one current-term line and a recent-study list containing only the learner's saved detailed maps for that term.
+- The dashboard is a deliberately calm, current-semester study space: one current-semester line and a recent-study list containing only the learner's saved detailed maps for that semester.
 - New learners receive a DeepFocus-branded planning welcome rather than an empty copy of a third-party learning-management dashboard.
 - Every supplied nursing course has a weekly module path drawn from its supplied outline.
-- The standalone Study Pathway Planner provides a five-term view of the 14 Nursing and 15 Midwifery course units. It uses course-unit codes—not generic “paper” labels—and visibly links to the source used for each pathway.
-- Learners can start at Year 1 Semester 1 or set a later entry point, record already-cleared earlier terms, choose a personal revision rhythm, and register individual course units in their private DeepFocus study space. Semester 1 is labelled February–June and Semester 2 July–December; the most recently saved term becomes the dashboard study term.
+- The standalone Study Pathway Planner provides a five-semester view of 28 Nursing and 28 Midwifery selectable revision courses. Where a published outline line names more than one subject, DeepFocus keeps the original outline code while allowing each named subject to be selected separately; it never invents a school code.
+- Learners can start at Year 1 Semester 1 or set a later entry point, record already-cleared earlier semesters, choose a personal revision rhythm, and register individual courses in their private DeepFocus study space. Semester 1 is labelled February–June and Semester 2 July–December; the most recently saved semester becomes the dashboard study semester.
 - The calendar remains a separate personal focus-block tool. It is not replaced by the pathway planner.
 - Progression clearance and registration are browser-only DeepFocus planning records. They are deliberately labelled as such: they do not award credit, enrol a learner with a school, or claim an official institutional prerequisite decision.
 - Module completion, recent history, accessibility choices, and personal calendar blocks are local browser-only preview state.
@@ -44,4 +44,4 @@ branch-based deployment avoids requiring a GitHub Actions runner.
 The GitHub Pages frontend is intentionally not presented as a payment, authentication,
 or official-registration system. See [the production access and enrolment design](docs/production-access.md)
 for the required entitlement architecture, account-abuse controls, later-entry clearance
-review, and the product model for the February–June and July–December academic terms.
+review, and the product model for the February–June and July–December academic semesters.

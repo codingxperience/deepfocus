@@ -46,14 +46,14 @@ export function Dashboard() {
       <main className="minimal-dashboard">
         <header className="minimal-dashboard__header">
           <div>
-            <span className="eyebrow eyebrow--accent"><Sparkles size={13} /> Your current study term</span>
+            <span className="eyebrow eyebrow--accent"><Sparkles size={13} /> Your current semester</span>
             <h1>Dashboard</h1>
           </div>
           <button onClick={() => navigate('/planner')}>Manage plan <ChevronRight size={16} /></button>
         </header>
 
-        <section className="minimal-dashboard__term" aria-label="Current study term">
-          <span>Current term</span>
+        <section className="minimal-dashboard__term" aria-label="Current semester">
+          <span>Current semester</span>
           <div><strong>{activeTerm.label}</strong><p>{activeTerm.period} · {pathway.credential}</p></div>
         </section>
 
@@ -75,11 +75,11 @@ function EmptyDashboard({ onOpenPlanner }: { onOpenPlanner: () => void }) {
     <AppShell pageTitle="Dashboard">
       <main className="minimal-dashboard minimal-dashboard--empty">
         <header className="minimal-dashboard__header">
-          <div><span className="eyebrow eyebrow--accent"><Sparkles size={13} /> DeepFocus revision</span><h1>Dashboard</h1></div>
+          <div><h1>Dashboard</h1></div>
         </header>
         <section className="minimal-dashboard__notice" role="status">
           <BookOpen size={18} />
-          <div><strong>Your study space is ready when you are.</strong><p>Choose a pathway and term in the planner to add your course units here.</p></div>
+          <div><strong>Your study space is ready when you are.</strong><p>Choose a pathway and semester in the planner to add your individual revision courses here.</p></div>
           <button onClick={onOpenPlanner}>Open planner <ArrowRight size={15} /></button>
         </section>
         <section className="minimal-dashboard__section" aria-labelledby="recent-study-empty"><header><h2 id="recent-study-empty">Recent study</h2></header><p className="minimal-dashboard__empty-copy">Nothing to show yet.</p></section>
@@ -90,7 +90,7 @@ function EmptyDashboard({ onOpenPlanner }: { onOpenPlanner: () => void }) {
 }
 
 function EmptyStudyState({ activeUnits, onOpenPlanner }: { activeUnits: number; onOpenPlanner: () => void }) {
-  return <div className="minimal-dashboard__empty-state"><p>{activeUnits ? 'No detailed revision map is available for this term yet.' : 'No course units have been selected for this term yet.'}</p><button onClick={onOpenPlanner}>{activeUnits ? 'Review plan' : 'Choose a term'} <ArrowRight size={14} /></button></div>
+  return <div className="minimal-dashboard__empty-state"><p>{activeUnits ? 'No detailed revision map is available for this semester yet.' : 'No revision courses have been selected for this semester yet.'}</p><button onClick={onOpenPlanner}>{activeUnits ? 'Review plan' : 'Choose a semester'} <ArrowRight size={14} /></button></div>
 }
 
 function StudyRow({ course, onOpen }: { course: Course; onOpen: () => void }) {
