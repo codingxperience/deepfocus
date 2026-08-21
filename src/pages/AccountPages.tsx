@@ -237,7 +237,7 @@ export function WorkspaceUpdatesPage() {
   const updates = [
     { icon: BookOpen, title: `${courses.length} course spaces are organised`, copy: `${weeklyUnits} outline-led revision units are ready to open from the dashboard or Study vault.`, action: 'Browse courses', to: '/courses' },
     { icon: FolderOpen, title: 'Study vault is available', copy: 'Course maps sit beside browser-only personal notes, so the source structure stays visible.', action: 'Open vault', to: '/account/vault' },
-    { icon: CalendarDays, title: 'The planner remains flexible', copy: 'Suggested focus blocks are optional prompts, and your own calendar blocks stay local.', action: 'Open planner', to: '/calendar' },
+    { icon: CalendarDays, title: 'The clinical pathway planner is ready', copy: 'Choose Nursing or Midwifery, inspect each course unit by term, and keep your revision rhythm private.', action: 'Open planner', to: '/planner' },
   ]
   const navigate = useNavigate()
   return <AccountPage title="Workspace updates" eyebrow="What is available" description="A concise record of DeepFocus capabilities. It is not an institutional announcement feed and never impersonates a school or instructor.">

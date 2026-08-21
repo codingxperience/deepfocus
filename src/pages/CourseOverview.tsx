@@ -44,7 +44,7 @@ export function CourseOverview() {
           <div className="course-hero__meta">
             <span><Clock3 size={15} /> {course.weeks.length} weeks</span>
             <span><Layers3 size={15} /> {totalSteps} learning steps</span>
-            <span><BookOpen size={15} /> Year 2 • Semester 1</span>
+            <span><BookOpen size={15} /> Year {course.year} • Semester {course.semester}</span>
           </div>
         </section>
 

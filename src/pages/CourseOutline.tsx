@@ -18,7 +18,7 @@ export function CourseOutline() {
         </header>
         <div className="outline-layout">
           <section className="outline-document">
-            <div className="outline-document__label"><span>{course.code}</span><span>Year 2 • Semester 1</span></div>
+            <div className="outline-document__label"><span>{course.code}</span><span>Year {course.year} • Semester {course.semester}</span></div>
             <h2>{course.title}</h2>
             <div className="outline-document__rule" />
             <ol>
@@ -33,7 +33,7 @@ export function CourseOutline() {
               <strong>Certificate in Nursing</strong>
               <span>Examination syllabus</span>
               <i />
-              <b>Year 2 • Semester 1</b>
+              <b>Year {course.year} • Semester {course.semester}</b>
               <p>{course.code}: {course.title}</p>
             </div>
             <p>The weekly structure preserves every relevant topic from the attached examination syllabus. Closely related lists are kept together as one coherent week.</p>

@@ -29,7 +29,7 @@ export function CourseShell({ children, sectionTitle, course }: CourseShellProps
     { to: `${coursePath}/resources`, label: 'Study resources', icon: BookOpenText },
   ]
   return (
-    <AppShell pageTitle={sectionTitle} pageEyebrow={`Year 2 • Semester 1 • ${course.title}`} courseContext>
+    <AppShell pageTitle={sectionTitle} pageEyebrow={`Year ${course.year} • Semester ${course.semester} • ${course.title}`} courseContext>
       <div className="course-layout">
         <aside className="course-nav" aria-label="Pharmacology course navigation">
           <div className="course-nav__top">
@@ -53,7 +53,7 @@ export function CourseShell({ children, sectionTitle, course }: CourseShellProps
           </nav>
           <div className="course-nav__footer">
             <span>Examination syllabus</span>
-            <p>Content follows the supplied Year 2 Semester 1 outline.</p>
+            <p>Content follows the supplied Year {course.year} Semester {course.semester} outline.</p>
             <button aria-label="Collapse course navigation"><PanelLeftClose size={18} /> Collapse</button>
           </div>
         </aside>

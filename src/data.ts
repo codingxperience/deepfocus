@@ -36,6 +36,9 @@ export type Course = {
   id: string
   code: string
   title: string
+  programme: 'Certificate in Nursing'
+  year: 1 | 2 | 3
+  semester: 1 | 2
   image: string
   accent: string
   active?: boolean
@@ -296,8 +299,11 @@ const palliativeCareWeeks: CourseWeek[] = [
 export const courses: Course[] = [
   {
     id: 'medical-nursing-1',
-    code: 'Paper 1',
+    code: 'CN 211',
     title: 'Medical Nursing I',
+    programme: 'Certificate in Nursing',
+    year: 2,
+    semester: 1,
     image: medicalNursing,
     accent: '#6757d9',
     kicker: 'Medical Nursing I',
@@ -308,8 +314,11 @@ export const courses: Course[] = [
   },
   {
     id: 'pharmacology-1',
-    code: 'Paper 1',
+    code: 'CN 211',
     title: 'Pharmacology I',
+    programme: 'Certificate in Nursing',
+    year: 2,
+    semester: 1,
     image: pharmacology,
     accent: '#9c4dcc',
     active: true,
@@ -321,8 +330,11 @@ export const courses: Course[] = [
   },
   {
     id: 'surgical-nursing-1',
-    code: 'Paper 2',
+    code: 'CN 212',
     title: 'Surgical Nursing I',
+    programme: 'Certificate in Nursing',
+    year: 2,
+    semester: 1,
     image: surgicalNursing,
     accent: '#267c7b',
     kicker: 'Surgical Nursing I',
@@ -333,8 +345,11 @@ export const courses: Course[] = [
   },
   {
     id: 'gynaecologic-nursing',
-    code: 'Paper 2',
+    code: 'CN 212',
     title: 'Gynaecologic Nursing',
+    programme: 'Certificate in Nursing',
+    year: 2,
+    semester: 1,
     image: gynaecologicNursing,
     accent: '#ad526e',
     kicker: 'Gynaecologic Nursing',
@@ -345,8 +360,11 @@ export const courses: Course[] = [
   },
   {
     id: 'paediatric-nursing-1',
-    code: 'Paper 3',
+    code: 'CN 213',
     title: 'Paediatric Nursing I',
+    programme: 'Certificate in Nursing',
+    year: 2,
+    semester: 1,
     image: paediatricNursing,
     accent: '#4980bd',
     kicker: 'Paediatric Nursing I',
@@ -357,8 +375,11 @@ export const courses: Course[] = [
   },
   {
     id: 'palliative-care',
-    code: 'Paper 3',
+    code: 'CN 213',
     title: 'Palliative Care',
+    programme: 'Certificate in Nursing',
+    year: 2,
+    semester: 1,
     image: palliativeCare,
     accent: '#b2764f',
     kicker: 'Palliative Care',
