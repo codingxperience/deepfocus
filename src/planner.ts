@@ -5,6 +5,7 @@ export type PathwayPlan = {
   sessionsPerWeek: number
   registeredUnitIds: string[]
   clearedTermIds: string[]
+  setupComplete: boolean
   savedAt?: string
 }
 
@@ -29,6 +30,7 @@ function createPathwayPlan(pathway: StudyPathway): PathwayPlan {
     sessionsPerWeek: 3,
     registeredUnitIds: [],
     clearedTermIds: [],
+    setupComplete: false,
   }
 }
 
@@ -55,6 +57,7 @@ function normalisePlan(pathway: StudyPathway, value: Partial<PathwayPlan> | unde
     sessionsPerWeek: typeof value?.sessionsPerWeek === 'number' ? Math.max(1, Math.min(7, Math.round(value.sessionsPerWeek))) : fallback.sessionsPerWeek,
     registeredUnitIds: Array.isArray(value?.registeredUnitIds) ? [...new Set(value.registeredUnitIds.filter((id): id is string => typeof id === 'string' && unitIds.has(id)))] : [],
     clearedTermIds: Array.isArray(value?.clearedTermIds) ? [...new Set(value.clearedTermIds.filter((id): id is string => typeof id === 'string' && termIds.has(id)))] : [],
+    setupComplete: value?.setupComplete === true,
     savedAt: typeof value?.savedAt === 'string' ? value.savedAt : undefined,
   }
 }
