@@ -2032,6 +2032,19 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .dashboard-no-maps button { padding: 0; border: 0; background: transparent; color: #98601e; display: inline-flex; align-items: center; gap: 3px; font-size: 8px; font-weight: 800; cursor: pointer; white-space: nowrap; }
 .focus-card--empty h2 { font-size: 17px; line-height: 1.2; }
 
+/* A first visit should feel like a quiet welcome, not an unfinished dashboard. */
+.dashboard-layout--empty { display: block; min-height: calc(100vh - var(--topbar)); }
+.dashboard-main--empty { width: min(1120px, 100%); min-height: calc(100vh - var(--topbar)); margin: 0 auto; padding-top: 45px; display: flex; flex-direction: column; }
+.dashboard-main--empty .page-heading h1 { margin-bottom: 18px; }
+.dashboard-welcome-notice { width: min(900px, 100%); min-height: 76px; border: 1px solid #f0bd36; background: #fffdf7; box-shadow: 0 3px 9px rgba(79,61,18,.1); display: grid; grid-template-columns: 62px minmax(0, 1fr) auto; align-items: stretch; }
+.dashboard-welcome-notice > span { background: #ffc53d; color: #fff; display: grid; place-items: center; }
+.dashboard-welcome-notice > div { padding: 14px 17px; }
+.dashboard-welcome-notice strong { color: #37333d; font-size: 13px; }
+.dashboard-welcome-notice p { margin: 4px 0 0; color: #69646c; font-size: 11px; line-height: 1.5; }
+.dashboard-welcome-notice button { align-self: center; min-height: 34px; margin: 0 15px 0 0; padding: 0 10px; border: 1px solid #cfc7ad; border-radius: 5px; background: #fff; color: #58482a; display: inline-flex; align-items: center; justify-content: center; gap: 5px; font-size: 9px; font-weight: 800; cursor: pointer; white-space: nowrap; }
+.dashboard-welcome-notice button:hover { border-color: #c8941c; background: #fff8e6; }
+.dashboard-main--empty .dashboard-footer { margin-top: auto; }
+
 @media (max-width: 1080px) {
   .dashboard-pathway-summary { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .dashboard-pathway-summary > button { grid-column: 1 / -1; justify-content: center; }
@@ -2059,6 +2072,10 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   .registered-unit-list { padding: 15px; }
   .dashboard-no-maps { grid-template-columns: 22px minmax(0, 1fr); }
   .dashboard-no-maps button { grid-column: 2; }
+  .dashboard-main--empty { padding-top: 30px; }
+  .dashboard-welcome-notice { grid-template-columns: 45px minmax(0, 1fr); }
+  .dashboard-welcome-notice > div { padding: 13px; }
+  .dashboard-welcome-notice button { grid-column: 2; justify-self: start; margin: 0 0 14px 13px; }
 }
 
 /* Degree-planner flow: deliberately quiet, staged, and term-first. */

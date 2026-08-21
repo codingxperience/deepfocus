@@ -7,6 +7,7 @@ import {
   ChevronRight,
   CircleAlert,
   Clock3,
+  Info,
   MoreHorizontal,
   SlidersHorizontal,
   Sparkles,
@@ -50,6 +51,10 @@ export function Dashboard() {
   const featuredCourse = registeredCourses[0]
   const entryTerm = pathway.terms.find((term) => term.id === plan.entryTermId) ?? pathway.terms[0]
 
+  if (!registeredUnits.length) {
+    return <EmptyDashboard onOpenPlanner={() => navigate('/planner')} />
+  }
+
   return (
     <AppShell pageTitle="Dashboard">
       <div className="dashboard-layout">
@@ -58,7 +63,7 @@ export function Dashboard() {
             <div>
               <span className="eyebrow eyebrow--accent"><Sparkles size={14} /> Your learning space</span>
               <h1>Welcome back.</h1>
-              <p>{registeredUnits.length ? `${pathway.credential} · ${registeredUnits.length} local revision registration${registeredUnits.length === 1 ? '' : 's'}.` : 'Start a pathway, then choose the individual course units you want to revise.'}</p>
+              <p>{pathway.credential} · {registeredUnits.length} local revision registration{registeredUnits.length === 1 ? '' : 's'}.</p>
             </div>
             <div className="segmented-control" aria-label="Choose dashboard view">
               <button className={filter === 'registered' ? 'is-active' : ''} onClick={() => setFilter('registered')}>My study space</button>
@@ -81,15 +86,11 @@ export function Dashboard() {
             {filter === 'library' && <button className="text-button"><SlidersHorizontal size={16} /> Sort</button>}
           </div>
 
-          {filter === 'registered' && !registeredUnits.length ? (
-            <PlannerEmptyState onOpen={() => navigate('/planner')} />
-          ) : (
-            <>
-              {visibleCourses.length > 0 && <div className="course-grid">{visibleCourses.map((course, index) => <CourseCard key={course.id} course={course} index={index} registered={registeredMapIds.has(course.id)} onOpen={() => navigate(`/courses/${course.id}`)} />)}</div>}
-              {filter === 'registered' && unitsWithoutMaps.length > 0 && <RegisteredUnitList units={unitsWithoutMaps} onOpenPlanner={() => navigate('/planner')} />}
-              {filter === 'registered' && registeredUnits.length > 0 && !visibleCourses.length && <NoDetailedMapsState onOpen={() => navigate('/planner')} />}
-            </>
-          )}
+          <>
+            {visibleCourses.length > 0 && <div className="course-grid">{visibleCourses.map((course, index) => <CourseCard key={course.id} course={course} index={index} registered={registeredMapIds.has(course.id)} onOpen={() => navigate(`/courses/${course.id}`)} />)}</div>}
+            {filter === 'registered' && unitsWithoutMaps.length > 0 && <RegisteredUnitList units={unitsWithoutMaps} onOpenPlanner={() => navigate('/planner')} />}
+            {filter === 'registered' && !visibleCourses.length && <NoDetailedMapsState onOpen={() => navigate('/planner')} />}
+          </>
 
           <footer className="dashboard-footer">
             <span>DeepFocus revision</span>
@@ -103,8 +104,8 @@ export function Dashboard() {
   )
 }
 
-function PlannerEmptyState({ onOpen }: { onOpen: () => void }) {
-  return <section className="dashboard-empty-state"><span><BookOpenCheck size={25} /></span><div><span className="eyebrow">No local registrations yet</span><h3>Build the study space around your actual pathway.</h3><p>Choose Nursing or Midwifery, select the term where you begin, record earlier clearance if you joined later, and register only the units you want DeepFocus to surface here.</p></div><button className="button button--primary" onClick={onOpen}>Open study planner <ArrowRight size={16} /></button></section>
+function EmptyDashboard({ onOpenPlanner }: { onOpenPlanner: () => void }) {
+  return <AppShell pageTitle="Dashboard"><div className="dashboard-layout dashboard-layout--empty"><section className="dashboard-main dashboard-main--empty"><header className="page-heading"><span className="eyebrow eyebrow--accent"><Sparkles size={14} /> DeepFocus revision</span><h1>Dashboard</h1></header><section className="dashboard-welcome-notice" role="status"><span><Info size={20} /></span><div><strong>Welcome to DeepFocus.</strong><p>You have not registered any course units for revision yet. Once you choose a pathway and save a registration, your study space will appear here.</p></div><button onClick={onOpenPlanner}>Open study planner <ArrowRight size={15} /></button></section><footer className="dashboard-footer"><span>DeepFocus revision</span><p>Your dashboard will grow only when you are ready.</p></footer></section></div></AppShell>
 }
 
 function NoDetailedMapsState({ onOpen }: { onOpen: () => void }) {
