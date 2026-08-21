@@ -37,17 +37,17 @@ export function Dashboard() {
   return (
     <AppShell pageTitle="Dashboard">
       <main className="minimal-dashboard minimal-dashboard--simple">
+        <section className="minimal-dashboard__notice minimal-dashboard__notice--static" role="status">
+          <span className="minimal-dashboard__notice-mark"><BookOpen size={18} /></span>
+          {hasRegistration
+            ? <div><strong>Your semester registration is saved.</strong><p>{activeTerm.label} · {activeTerm.period} · {pathway.credential}. {activeUnits.length} individual revision course{activeUnits.length === 1 ? '' : 's'} saved for this semester.</p></div>
+            : <div><strong>Welcome to DeepFocus.</strong><p>Choose a pathway, semester, and individual revision courses in the planner. This dashboard will only reflect what you save.</p></div>}
+        </section>
+
         <header className="minimal-dashboard__header">
           <h1>Dashboard</h1>
           <button onClick={() => navigate('/planner')}>{hasRegistration ? 'Manage plan' : 'Open planner'} <ChevronRight size={16} /></button>
         </header>
-
-        <section className="minimal-dashboard__notice minimal-dashboard__notice--static" role="status">
-          <BookOpen size={18} />
-          {hasRegistration
-            ? <div><strong>Your course registration is saved.</strong><p>{activeTerm.label} · {activeTerm.period} · {pathway.credential}. {activeUnits.length} individual revision course{activeUnits.length === 1 ? '' : 's'} saved for this semester.</p></div>
-            : <div><strong>Your study space is ready when you are.</strong><p>Choose a pathway, semester, and individual revision courses in the planner. This dashboard will only reflect what you save.</p></div>}
-        </section>
 
         <footer className="minimal-dashboard__footer"><span>DeepFocus revision</span><p>Private study planning</p></footer>
       </main>

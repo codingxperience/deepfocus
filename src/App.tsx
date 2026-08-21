@@ -22,11 +22,16 @@ import {
   SettingsPage,
 } from './pages/SecondaryPages'
 import { PlannerPage } from './pages/PlannerPage'
+import { hasCompletedPlannerSetup, loadPlannerState } from './planner'
+
+function HomeRedirect() {
+  return <Navigate to={hasCompletedPlannerSetup(loadPlannerState()) ? '/dashboard' : '/planner'} replace />
+}
 
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/dashboard" replace />} />
+      <Route path="/" element={<HomeRedirect />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/courses" element={<CoursesPage />} />
       <Route path="/courses/:courseId" element={<CourseOverview />} />
@@ -45,7 +50,7 @@ export default function App() {
       <Route path="/account/updates" element={<WorkspaceUpdatesPage />} />
       <Route path="/history" element={<HistoryPage />} />
       <Route path="/help" element={<HelpPage />} />
-      <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      <Route path="*" element={<HomeRedirect />} />
     </Routes>
   )
 }

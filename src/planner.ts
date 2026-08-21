@@ -160,6 +160,10 @@ export function getPathwayPlan(state: PlannerState, pathwayId: PathwayId): Pathw
   return state.pathways[pathwayId]
 }
 
+export function hasCompletedPlannerSetup(state: PlannerState): boolean {
+  return getPathwayPlan(state, state.activePathwayId).setupComplete
+}
+
 export function getRegisteredUnits(state: PlannerState, pathwayId = state.activePathwayId): CurriculumUnit[] {
   const pathway = getStudyPathway(pathwayId)
   const registered = new Set(getPathwayPlan(state, pathwayId).registeredUnitIds)

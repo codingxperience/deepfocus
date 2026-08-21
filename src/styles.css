@@ -2200,6 +2200,12 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .minimal-dashboard__empty-copy { padding: 19px 0; border-bottom: 1px solid var(--line); color: var(--ink-faint); }
 .minimal-dashboard__notice { width: min(820px, 100%); min-height: 70px; margin-top: 28px; padding: 14px 16px; border: 1px solid #ded9f2; border-radius: 10px; background: #fbfaff; color: var(--violet); display: grid; grid-template-columns: 25px minmax(0, 1fr) auto; align-items: center; gap: 10px; }
 .minimal-dashboard__notice--static { grid-template-columns: 25px minmax(0, 1fr); }
+.minimal-dashboard--simple { padding-top: 27px; }
+.minimal-dashboard--simple .minimal-dashboard__notice { width: min(900px, 100%); min-height: 76px; margin: 0 0 29px; padding: 0; border-color: #d9d1fb; border-radius: 9px; background: #fff; box-shadow: 0 5px 16px rgba(69, 52, 138, .08); grid-template-columns: 58px minmax(0, 1fr); gap: 0; overflow: hidden; }
+.minimal-dashboard__notice-mark { align-self: stretch; background: linear-gradient(145deg, var(--violet), var(--violet-dark)); color: #fff; display: grid; place-items: center; }
+.minimal-dashboard--simple .minimal-dashboard__notice > div { padding: 14px 18px; }
+.minimal-dashboard--simple .minimal-dashboard__notice strong { color: var(--ink); font-size: 11px; }
+.minimal-dashboard--simple .minimal-dashboard__notice p { max-width: 720px; color: var(--ink-soft); font-size: 10px; }
 .minimal-dashboard__notice > div { min-width: 0; }
 .minimal-dashboard__notice strong { color: #403b69; font-size: 11px; }
 .minimal-dashboard__notice p { margin: 3px 0 0; color: #77718f; font-size: 10px; line-height: 1.45; }
@@ -2213,6 +2219,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   .minimal-dashboard__term { align-items: flex-start; flex-direction: column; gap: 7px; }
   .minimal-dashboard__section { margin-top: 31px; }
   .minimal-dashboard__notice { grid-template-columns: 20px minmax(0, 1fr); }
+  .minimal-dashboard--simple .minimal-dashboard__notice { grid-template-columns: 48px minmax(0, 1fr); margin-bottom: 24px; }
+  .minimal-dashboard--simple .minimal-dashboard__notice > div { padding: 13px 14px; }
   .minimal-dashboard__notice button { grid-column: 2; justify-self: start; margin-top: 2px; }
   .minimal-dashboard__empty-state { align-items: flex-start; flex-direction: column; gap: 10px; }
 }

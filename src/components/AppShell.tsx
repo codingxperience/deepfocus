@@ -30,6 +30,7 @@ import {
 import { CircleMark } from './Brand'
 import { getRecentActivity, recordRecentActivity, relativeActivityTime, type RecentActivity } from '../activity'
 import { courses } from '../data'
+import { hasCompletedPlannerSetup, loadPlannerState } from '../planner'
 import { applyInterfacePreference, getInterfacePreference, preferenceEvent, type InterfacePreference } from '../preferences'
 
 const railItems = [
@@ -104,7 +105,11 @@ export function AppShell({ children, pageTitle, pageEyebrow, courseContext = fal
   return (
     <div className="app-shell">
       <aside className={`global-rail${mobileNavOpen ? ' global-rail--open' : ''}`} aria-label="Primary navigation">
-        <button className="global-rail__brand" onClick={() => navigate('/dashboard')} aria-label="DeepFocus home">
+        <button
+          className="global-rail__brand"
+          onClick={() => navigate(hasCompletedPlannerSetup(loadPlannerState()) ? '/dashboard' : '/planner')}
+          aria-label="DeepFocus home"
+        >
           <CircleMark />
         </button>
 

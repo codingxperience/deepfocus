@@ -130,7 +130,7 @@ export function PlannerPage() {
 }
 
 function WelcomeScreen({ onStart, hasExistingPlan, onContinue }: { onStart: () => void; hasExistingPlan: boolean; onContinue: () => void }) {
-  return <section className="degree-stage degree-stage--welcome"><span className="degree-stage__mark"><GraduationCap size={25} /></span><h1>Welcome to Study Planner!</h1><p>Build your DeepFocus revision pathway in just a few easy steps.</p><ol><li>Choose a certificate pathway</li><li>Choose the semester where you are joining</li><li>Set your revision workload</li></ol><button className="degree-button degree-button--primary" onClick={onStart}>Start: Choose a Certificate <ArrowRight size={16} /></button>{hasExistingPlan && <button className="degree-text-button" onClick={onContinue}>Continue your saved plan</button>}<DegreeFooter /></section>
+  return <section className="degree-stage degree-stage--welcome"><span className="degree-stage__mark"><GraduationCap size={25} /></span><h1>Welcome to your DeepFocus planner.</h1><p>Build a revision pathway that follows the semester where you are joining.</p><ol><li>Choose a certificate pathway</li><li>Choose the semester where you are joining</li><li>Set your revision workload</li></ol><button className="degree-button degree-button--primary" onClick={onStart}>Start: Choose a Certificate <ArrowRight size={16} /></button>{hasExistingPlan && <button className="degree-text-button" onClick={onContinue}>Continue your saved plan</button>}<DegreeFooter /></section>
 }
 
 function CertificateScreen({ onChoose, onBack }: { onChoose: (pathwayId: PathwayId) => void; onBack: () => void }) {
