@@ -27,7 +27,7 @@ branch-based deployment avoids requiring a GitHub Actions runner.
 
 ## Product scope
 
-- The dashboard is a deliberately calm, current-term study space: it shows only the learner's saved course choices for that term, the available detailed maps, a personal study rhythm, and a separate calendar action.
+- The dashboard is a deliberately calm, current-term study space: one current-term line and a recent-study list containing only the learner's saved detailed maps for that term.
 - New learners receive a DeepFocus-branded planning welcome rather than an empty copy of a third-party learning-management dashboard.
 - Every supplied nursing course has a weekly module path drawn from its supplied outline.
 - The standalone Study Pathway Planner provides a five-term view of the 14 Nursing and 15 Midwifery course units. It uses course-unit codes—not generic “paper” labels—and visibly links to the source used for each pathway.
