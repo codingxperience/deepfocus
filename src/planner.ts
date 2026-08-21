@@ -2,6 +2,7 @@ import { getStudyPathway, studyPathways, type CurriculumTerm, type CurriculumUni
 
 export type PathwayPlan = {
   entryTermId: string
+  activeTermId: string
   sessionsPerWeek: number
   registeredUnitIds: string[]
   clearedTermIds: string[]
@@ -27,6 +28,7 @@ export const plannerChangeEvent = 'deepfocus-study-planner-change'
 function createPathwayPlan(pathway: StudyPathway): PathwayPlan {
   return {
     entryTermId: pathway.terms[0].id,
+    activeTermId: pathway.terms[0].id,
     sessionsPerWeek: 3,
     registeredUnitIds: [],
     clearedTermIds: [],
@@ -52,10 +54,20 @@ function normalisePlan(pathway: StudyPathway, value: Partial<PathwayPlan> | unde
   const fallback = createPathwayPlan(pathway)
   const termIds = new Set(pathway.terms.map((term) => term.id))
   const unitIds = new Set(pathway.units.map((unit) => unit.id))
+  const registeredUnitIds = Array.isArray(value?.registeredUnitIds)
+    ? [...new Set(value.registeredUnitIds.filter((id): id is string => typeof id === 'string' && unitIds.has(id)))]
+    : []
+  const firstRegisteredUnit = pathway.units.find((unit) => registeredUnitIds.includes(unit.id))
+  const firstRegisteredTermId = firstRegisteredUnit
+    ? pathway.terms.find((term) => term.year === firstRegisteredUnit.year && term.semester === firstRegisteredUnit.semester)?.id
+    : undefined
   return {
     entryTermId: typeof value?.entryTermId === 'string' && termIds.has(value.entryTermId) ? value.entryTermId : fallback.entryTermId,
+    activeTermId: typeof value?.activeTermId === 'string' && termIds.has(value.activeTermId)
+      ? value.activeTermId
+      : firstRegisteredTermId ?? (typeof value?.entryTermId === 'string' && termIds.has(value.entryTermId) ? value.entryTermId : fallback.activeTermId),
     sessionsPerWeek: typeof value?.sessionsPerWeek === 'number' ? Math.max(1, Math.min(7, Math.round(value.sessionsPerWeek))) : fallback.sessionsPerWeek,
-    registeredUnitIds: Array.isArray(value?.registeredUnitIds) ? [...new Set(value.registeredUnitIds.filter((id): id is string => typeof id === 'string' && unitIds.has(id)))] : [],
+    registeredUnitIds,
     clearedTermIds: Array.isArray(value?.clearedTermIds) ? [...new Set(value.clearedTermIds.filter((id): id is string => typeof id === 'string' && termIds.has(id)))] : [],
     setupComplete: value?.setupComplete === true,
     savedAt: typeof value?.savedAt === 'string' ? value.savedAt : undefined,

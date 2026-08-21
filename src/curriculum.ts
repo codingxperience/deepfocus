@@ -5,6 +5,7 @@ export type CurriculumTerm = {
   year: 1 | 2 | 3
   semester: 1 | 2
   label: string
+  period: string
 }
 
 export type CurriculumUnit = {
@@ -31,11 +32,11 @@ export type StudyPathway = {
 }
 
 const standardTerms: CurriculumTerm[] = [
-  { id: 'y1s1', year: 1, semester: 1, label: 'Year 1 · Semester 1' },
-  { id: 'y1s2', year: 1, semester: 2, label: 'Year 1 · Semester 2' },
-  { id: 'y2s1', year: 2, semester: 1, label: 'Year 2 · Semester 1' },
-  { id: 'y2s2', year: 2, semester: 2, label: 'Year 2 · Semester 2' },
-  { id: 'y3s1', year: 3, semester: 1, label: 'Year 3 · Semester 1' },
+  { id: 'y1s1', year: 1, semester: 1, label: 'Year 1 · Semester 1', period: 'February–June' },
+  { id: 'y1s2', year: 1, semester: 2, label: 'Year 1 · Semester 2', period: 'July–December' },
+  { id: 'y2s1', year: 2, semester: 1, label: 'Year 2 · Semester 1', period: 'February–June' },
+  { id: 'y2s2', year: 2, semester: 2, label: 'Year 2 · Semester 2', period: 'July–December' },
+  { id: 'y3s1', year: 3, semester: 1, label: 'Year 3 · Semester 1', period: 'February–June' },
 ]
 
 export const studyPathways: StudyPathway[] = [
