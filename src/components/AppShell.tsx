@@ -35,7 +35,8 @@ import { applyInterfacePreference, getInterfacePreference, preferenceEvent, type
 const railItems = [
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/courses', label: 'Courses', icon: BookOpen },
-  { to: '/planner', label: 'Planner', icon: CalendarDays },
+  { to: '/calendar', label: 'Plan', icon: CalendarDays },
+  { to: '/planner', label: 'Planner', icon: GraduationCap },
   { to: '/inbox', label: 'Inbox', icon: Inbox, badge: 2 },
 ]
 
@@ -270,7 +271,7 @@ function HistoryPanel({ onNavigate }: { onNavigate: (path: string) => void }) {
 }
 
 function ActivityButton({ activity, onClick }: { activity: RecentActivity; onClick: () => void }) {
-  const Icon = activity.path.includes('modules') ? BookOpen : (activity.path === '/calendar' || activity.path === '/planner') ? CalendarDays : activity.path === '/inbox' ? Inbox : activity.path === '/dashboard' ? LayoutDashboard : FileText
+  const Icon = activity.path.includes('modules') ? BookOpen : activity.path === '/planner' ? GraduationCap : activity.path === '/calendar' ? CalendarDays : activity.path === '/inbox' ? Inbox : activity.path === '/dashboard' ? LayoutDashboard : FileText
   return <button className="activity-button" onClick={onClick}><span className="activity-button__icon"><Icon size={16} /></span><span><strong>{activity.label}</strong><small>{activity.context || 'DeepFocus revision'} · {relativeActivityTime(activity.visitedAt)}</small></span><ChevronRight size={16} /></button>
 }
 
@@ -280,7 +281,7 @@ function HelpPanel({ onNavigate }: { onNavigate: (path: string) => void }) {
       <div className="help-panel__illustration" aria-hidden="true"><Map size={58} /><span /><i /><b /></div>
       <div className="help-panel__intro"><span className="eyebrow eyebrow--accent"><Sparkles size={13} /> Start here</span><h3>Find your way, one focused step at a time.</h3><p>DeepFocus keeps the supplied nursing outline visible without adding invented lessons or dates.</p></div>
       <button className="help-panel__primary" onClick={() => onNavigate('/courses')}><BookOpen size={18} /><span><strong>Browse your courses</strong><small>Open a course and choose a weekly module</small></span><ChevronRight size={17} /></button>
-      <section className="help-panel__resources"><span className="eyebrow">Useful paths</span><button onClick={() => onNavigate('/courses/pharmacology-1/modules?week=1')}>Start Pharmacology I <ChevronRight size={15} /></button><button onClick={() => onNavigate('/planner')}>Open your pathway <ChevronRight size={15} /></button><button onClick={() => onNavigate('/settings')}>Adjust accessibility <ChevronRight size={15} /></button></section>
+      <section className="help-panel__resources"><span className="eyebrow">Useful paths</span><button onClick={() => onNavigate('/courses/pharmacology-1/modules?week=1')}>Start Pharmacology I <ChevronRight size={15} /></button><button onClick={() => onNavigate('/planner')}>Build your study pathway <ChevronRight size={15} /></button><button onClick={() => onNavigate('/calendar')}>Plan a focus block <ChevronRight size={15} /></button><button onClick={() => onNavigate('/settings')}>Adjust accessibility <ChevronRight size={15} /></button></section>
       <p className="help-panel__note">Need course material that is not in the outline? Keep the study structure here, then add your own verified notes.</p>
     </div>
   )

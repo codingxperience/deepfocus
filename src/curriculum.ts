@@ -93,7 +93,7 @@ export const studyPathways: StudyPathway[] = [
     source: {
       title: 'Certificate in Midwifery course outline',
       url: 'https://midwivesrevisionuganda.com/certificate-in-midwifery-course-outline/',
-      note: 'A public revision reference, checked against current assessment listings. Confirm any institutional change directly with your school or assessment body.',
+      note: 'A public revision reference. Confirm any institutional change directly with your school or assessment body.',
     },
   },
 ]
