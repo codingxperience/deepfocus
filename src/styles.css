@@ -2199,6 +2199,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .minimal-dashboard__empty-state button { padding: 0; border: 0; background: transparent; color: var(--violet); display: inline-flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 800; cursor: pointer; white-space: nowrap; }
 .minimal-dashboard__empty-copy { padding: 19px 0; border-bottom: 1px solid var(--line); color: var(--ink-faint); }
 .minimal-dashboard__notice { width: min(820px, 100%); min-height: 70px; margin-top: 28px; padding: 14px 16px; border: 1px solid #ded9f2; border-radius: 10px; background: #fbfaff; color: var(--violet); display: grid; grid-template-columns: 25px minmax(0, 1fr) auto; align-items: center; gap: 10px; }
+.minimal-dashboard__notice--static { grid-template-columns: 25px minmax(0, 1fr); }
 .minimal-dashboard__notice > div { min-width: 0; }
 .minimal-dashboard__notice strong { color: #403b69; font-size: 11px; }
 .minimal-dashboard__notice p { margin: 3px 0 0; color: #77718f; font-size: 10px; line-height: 1.45; }

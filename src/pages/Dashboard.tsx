@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ArrowRight, BookOpen, ChevronRight, Sparkles } from 'lucide-react'
+import { BookOpen, ChevronRight } from 'lucide-react'
 
 import { AppShell } from '../components/AppShell'
 import { getStudyPathway, getTermUnits } from '../curriculum'
-import { courses, type Course } from '../data'
 import { getPathwayPlan, getRegisteredUnits, loadPlannerState, plannerChangeEvent, type PlannerState } from '../planner'
 
 function usePlannerRecord() {
@@ -29,74 +28,29 @@ export function Dashboard() {
   const pathway = getStudyPathway(plannerRecord.activePathwayId)
   const plan = getPathwayPlan(plannerRecord, pathway.id)
   const registeredUnits = getRegisteredUnits(plannerRecord)
-
-  if (!registeredUnits.length) {
-    return <EmptyDashboard onOpenPlanner={() => navigate('/planner')} />
-  }
-
   const requestedTerm = pathway.terms.find((term) => term.id === plan.activeTermId) ?? pathway.terms[0]
   const termWithSelections = pathway.terms.find((term) => getTermUnits(pathway, term.id).some((unit) => plan.registeredUnitIds.includes(unit.id)))
   const activeTerm = getTermUnits(pathway, requestedTerm.id).some((unit) => plan.registeredUnitIds.includes(unit.id)) ? requestedTerm : termWithSelections ?? requestedTerm
   const activeUnits = getTermUnits(pathway, activeTerm.id).filter((unit) => plan.registeredUnitIds.includes(unit.id))
-  const activeMapIds = new Set(activeUnits.flatMap((unit) => unit.revisionMapIds ?? []))
-  const activeCourses = courses.filter((course) => activeMapIds.has(course.id))
+  const hasRegistration = registeredUnits.length > 0
 
-  return (
-    <AppShell pageTitle="Dashboard" pageEyebrow={pathway.credential}>
-      <main className="minimal-dashboard">
-        <header className="minimal-dashboard__header">
-          <div>
-            <span className="eyebrow eyebrow--accent"><Sparkles size={13} /> Your current semester</span>
-            <h1>Dashboard</h1>
-          </div>
-          <button onClick={() => navigate('/planner')}>Manage plan <ChevronRight size={16} /></button>
-        </header>
-
-        <section className="minimal-dashboard__term" aria-label="Current semester">
-          <span>Current semester</span>
-          <div><strong>{activeTerm.label}</strong><p>{activeTerm.period} · {pathway.credential}</p></div>
-        </section>
-
-        <section className="minimal-dashboard__section" aria-labelledby="recent-study">
-          <header><h2 id="recent-study">Recent study</h2></header>
-          {activeCourses.length > 0
-            ? <div className="minimal-study-list">{activeCourses.map((course) => <StudyRow key={course.id} course={course} onOpen={() => navigate(`/courses/${course.id}`)} />)}</div>
-            : <EmptyStudyState activeUnits={activeUnits.length} onOpenPlanner={() => navigate('/planner')} />}
-        </section>
-
-        <footer className="minimal-dashboard__footer"><span>DeepFocus revision</span><p>Private study planning</p></footer>
-      </main>
-    </AppShell>
-  )
-}
-
-function EmptyDashboard({ onOpenPlanner }: { onOpenPlanner: () => void }) {
   return (
     <AppShell pageTitle="Dashboard">
-      <main className="minimal-dashboard minimal-dashboard--empty">
+      <main className="minimal-dashboard minimal-dashboard--simple">
         <header className="minimal-dashboard__header">
-          <div><h1>Dashboard</h1></div>
+          <h1>Dashboard</h1>
+          <button onClick={() => navigate('/planner')}>{hasRegistration ? 'Manage plan' : 'Open planner'} <ChevronRight size={16} /></button>
         </header>
-        <section className="minimal-dashboard__notice" role="status">
+
+        <section className="minimal-dashboard__notice minimal-dashboard__notice--static" role="status">
           <BookOpen size={18} />
-          <div><strong>Your study space is ready when you are.</strong><p>Choose a pathway and semester in the planner to add your individual revision courses here.</p></div>
-          <button onClick={onOpenPlanner}>Open planner <ArrowRight size={15} /></button>
+          {hasRegistration
+            ? <div><strong>Your course registration is saved.</strong><p>{activeTerm.label} · {activeTerm.period} · {pathway.credential}. {activeUnits.length} individual revision course{activeUnits.length === 1 ? '' : 's'} saved for this semester.</p></div>
+            : <div><strong>Your study space is ready when you are.</strong><p>Choose a pathway, semester, and individual revision courses in the planner. This dashboard will only reflect what you save.</p></div>}
         </section>
-        <section className="minimal-dashboard__section" aria-labelledby="recent-study-empty"><header><h2 id="recent-study-empty">Recent study</h2></header><p className="minimal-dashboard__empty-copy">Nothing to show yet.</p></section>
+
         <footer className="minimal-dashboard__footer"><span>DeepFocus revision</span><p>Private study planning</p></footer>
       </main>
     </AppShell>
   )
-}
-
-function EmptyStudyState({ activeUnits, onOpenPlanner }: { activeUnits: number; onOpenPlanner: () => void }) {
-  return <div className="minimal-dashboard__empty-state"><p>{activeUnits ? 'No detailed revision map is available for this semester yet.' : 'No revision courses have been selected for this semester yet.'}</p><button onClick={onOpenPlanner}>{activeUnits ? 'Review plan' : 'Choose a semester'} <ArrowRight size={14} /></button></div>
-}
-
-function StudyRow({ course, onOpen }: { course: Course; onOpen: () => void }) {
-  return <button className="minimal-study-row" onClick={onOpen} aria-label={`Open ${course.title}`}>
-    <span className="minimal-study-row__image"><img src={course.image} alt="" /></span>
-    <span className="minimal-study-row__copy"><small>{course.code}</small><strong>{course.title}</strong><em>{course.weeks.length} week revision map</em></span>
-    <ChevronRight size={17} />
-  </button>
 }
