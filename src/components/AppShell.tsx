@@ -9,6 +9,7 @@ import {
   CircleHelp,
   Clock3,
   Command,
+  CreditCard,
   FileText,
   FolderOpen,
   Globe2,
@@ -38,6 +39,7 @@ const railItems = [
   { to: '/courses', label: 'Courses', icon: BookOpen },
   { to: '/calendar', label: 'Plan', icon: CalendarDays },
   { to: '/planner', label: 'Planner', icon: GraduationCap },
+  { to: '/learner/payment', label: 'Access', icon: CreditCard },
   { to: '/inbox', label: 'Inbox', icon: Inbox, badge: 2 },
 ]
 

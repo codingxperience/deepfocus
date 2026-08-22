@@ -156,6 +156,10 @@ export function savePlannerState(next: PlannerState): PlannerState {
   return state
 }
 
+export function resetPlannerState(): PlannerState {
+  return savePlannerState(createPlannerState())
+}
+
 export function getPathwayPlan(state: PlannerState, pathwayId: PathwayId): PathwayPlan {
   return state.pathways[pathwayId]
 }
