@@ -29,6 +29,7 @@ import {
 } from 'lucide-react'
 
 import { CircleMark } from './Brand'
+import { endPreviewSession } from '../auth'
 import { getRecentActivity, recordRecentActivity, relativeActivityTime, type RecentActivity } from '../activity'
 import { courses } from '../data'
 import { hasCompletedPlannerSetup, loadPlannerState } from '../planner'
@@ -39,7 +40,7 @@ const railItems = [
   { to: '/courses', label: 'Courses', icon: BookOpen },
   { to: '/calendar', label: 'Plan', icon: CalendarDays },
   { to: '/planner', label: 'Planner', icon: GraduationCap },
-  { to: '/learner/payment', label: 'Access', icon: CreditCard },
+  { to: '/learner/payment', label: 'Payments', icon: CreditCard },
   { to: '/inbox', label: 'Inbox', icon: Inbox, badge: 2 },
 ]
 
@@ -60,6 +61,11 @@ export function AppShell({ children, pageTitle, pageEyebrow, courseContext = fal
   const [dyslexiaFont, setDyslexiaFont] = useState(() => getInterfacePreference('dyslexiaFont'))
   const location = useLocation()
   const navigate = useNavigate()
+  const signOut = () => {
+    endPreviewSession()
+    setDrawer(null)
+    navigate('/sign-in', { replace: true })
+  }
 
   useEffect(() => {
     setMobileNavOpen(false)
@@ -192,6 +198,7 @@ export function AppShell({ children, pageTitle, pageEyebrow, courseContext = fal
         dyslexiaFont={dyslexiaFont}
         onToggleHighContrast={() => setHighContrast((current) => !current)}
         onToggleDyslexiaFont={() => setDyslexiaFont((current) => !current)}
+        onLogout={signOut}
       />
       <SearchDialog open={searchOpen} onClose={() => setSearchOpen(false)} />
     </div>
@@ -206,9 +213,10 @@ type UtilityDrawerProps = {
   dyslexiaFont: boolean
   onToggleHighContrast: () => void
   onToggleDyslexiaFont: () => void
+  onLogout: () => void
 }
 
-function UtilityDrawer({ kind, onClose, onNavigate, highContrast, dyslexiaFont, onToggleHighContrast, onToggleDyslexiaFont }: UtilityDrawerProps) {
+function UtilityDrawer({ kind, onClose, onNavigate, highContrast, dyslexiaFont, onToggleHighContrast, onToggleDyslexiaFont, onLogout }: UtilityDrawerProps) {
   if (!kind) return null
   const title = kind === 'account' ? 'Account' : kind === 'history' ? 'Recent history' : 'Help'
   return (
@@ -219,7 +227,7 @@ function UtilityDrawer({ kind, onClose, onNavigate, highContrast, dyslexiaFont, 
           <div>{kind !== 'account' && <span className="eyebrow">DeepFocus revision</span>}<h2>{title}</h2></div>
           <button className="utility-drawer__close" onClick={onClose} aria-label={`Close ${title}`}><X size={20} /></button>
         </header>
-        {kind === 'account' && <AccountPanel onNavigate={onNavigate} highContrast={highContrast} dyslexiaFont={dyslexiaFont} onToggleHighContrast={onToggleHighContrast} onToggleDyslexiaFont={onToggleDyslexiaFont} />}
+        {kind === 'account' && <AccountPanel onNavigate={onNavigate} highContrast={highContrast} dyslexiaFont={dyslexiaFont} onToggleHighContrast={onToggleHighContrast} onToggleDyslexiaFont={onToggleDyslexiaFont} onLogout={onLogout} />}
         {kind === 'history' && <HistoryPanel onNavigate={onNavigate} />}
         {kind === 'help' && <HelpPanel onNavigate={onNavigate} />}
       </aside>
@@ -227,14 +235,14 @@ function UtilityDrawer({ kind, onClose, onNavigate, highContrast, dyslexiaFont, 
   )
 }
 
-function AccountPanel({ onNavigate, highContrast, dyslexiaFont, onToggleHighContrast, onToggleDyslexiaFont }: Omit<UtilityDrawerProps, 'kind' | 'onClose'>) {
+function AccountPanel({ onNavigate, highContrast, dyslexiaFont, onToggleHighContrast, onToggleDyslexiaFont, onLogout }: Omit<UtilityDrawerProps, 'kind' | 'onClose'>) {
   return (
     <div className="account-panel">
       <div className="account-panel__identity">
         <span className="avatar avatar--profile">FO</span>
         <h3>Fred Okorio</h3>
         <p>DeepFocus learner</p>
-        <button className="account-panel__logout" type="button"><LogOut size={14} /> Log out</button>
+        <button className="account-panel__logout" type="button" onClick={onLogout}><LogOut size={14} /> Log out</button>
       </div>
       <nav className="account-panel__links" aria-label="Account links">
         <AccountLink icon={Bell} label="Study notices" helper="Local reminder preferences" onClick={() => onNavigate('/account/notices')} />

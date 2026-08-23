@@ -2003,6 +2003,78 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   .pathway-calendar-link { padding: 21px; }
 }
 
+/* Payment space: deliberately small, with the decision and its response in one view. */
+.dashboard-payment-summary { width: min(760px, 100%); margin-top: 25px; padding: 15px 16px; border: 1px solid #e1ddef; border-radius: 11px; background: #fff; display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: 22px; box-shadow: 0 5px 17px rgba(41, 35, 80, .035); }
+.dashboard-payment-summary__intro { min-width: 0; display: flex; align-items: center; gap: 10px; }
+.dashboard-payment-summary__intro > span { width: 33px; height: 33px; border-radius: 9px; background: #f0edff; color: var(--violet); display: grid; place-items: center; flex: 0 0 auto; }
+.dashboard-payment-summary .eyebrow { margin: 0 0 3px; font-size: 8px; }
+.dashboard-payment-summary strong, .dashboard-payment-summary small { display: block; }
+.dashboard-payment-summary__intro strong { overflow: hidden; color: var(--ink); font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+.dashboard-payment-summary__intro small, .dashboard-payment-summary__amount small { margin-top: 3px; color: var(--ink-faint); font-size: 8px; }
+.dashboard-payment-summary__amount { min-width: 92px; padding-left: 19px; border-left: 1px solid var(--line); }
+.dashboard-payment-summary__amount strong { margin-top: 4px; color: #3a3655; font-size: 12px; }
+.dashboard-payment-summary > button { min-height: 34px; padding: 0 10px; border: 1px solid #d5ceef; border-radius: 8px; background: #f8f7ff; color: var(--violet-dark); display: inline-flex; align-items: center; gap: 4px; font-size: 9px; font-weight: 800; cursor: pointer; white-space: nowrap; }
+.dashboard-payment-summary > button:hover { border-color: #afa4eb; background: #f1efff; }
+
+.payment-page { width: min(830px, calc(100% - 52px)); padding-top: 50px; }
+.payment-page__header { padding-bottom: 22px; border-bottom: 1px solid var(--line); }
+.payment-page__header h1 { margin: 8px 0 8px; color: var(--ink); font-size: clamp(31px, 3.4vw, 42px); letter-spacing: -.045em; }
+.payment-page__header p:not(.eyebrow) { max-width: 510px; margin: 0; color: var(--ink-soft); font-size: 12px; line-height: 1.6; }
+.payment-account-card { margin-top: 25px; overflow: hidden; border: 1px solid #e1ddef; border-radius: 15px; background: #fff; box-shadow: 0 12px 28px rgba(41, 35, 80, .045); }
+.payment-account-card__summary { min-height: 122px; padding: 25px 27px; background: linear-gradient(112deg, #fbfaff 0%, #f6f9ff 100%); display: flex; align-items: center; gap: 13px; }
+.payment-account-card__summary > span { width: 41px; height: 41px; border-radius: 12px; background: var(--navy); color: #fff; display: grid; place-items: center; flex: 0 0 auto; }
+.payment-account-card .eyebrow { margin: 0 0 5px; font-size: 8px; }
+.payment-account-card__summary strong, .payment-account-card__summary small { display: block; }
+.payment-account-card__summary strong { color: #39344f; font-family: 'Manrope', sans-serif; font-size: 25px; line-height: 1; letter-spacing: -.055em; }
+.payment-account-card__summary small { margin-top: 7px; color: var(--ink-soft); font-size: 9px; }
+.payment-account-card__summary em { margin-left: auto; padding: 6px 8px; border-radius: 50px; background: #e5f7ed; color: #287a57; display: inline-flex; align-items: center; gap: 4px; font-size: 8px; font-style: normal; font-weight: 900; }
+.payment-account-card__detail { min-height: 74px; padding: 17px 27px; border-top: 1px solid #e7e4ee; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; column-gap: 18px; }
+.payment-account-card__detail span { color: var(--ink-soft); font-size: 10px; }
+.payment-account-card__detail strong { color: #3d384f; font-size: 11px; text-align: right; }
+.payment-account-card__detail small { grid-column: 1 / -1; margin-top: 4px; color: var(--ink-faint); font-size: 8px; line-height: 1.4; }
+.payment-account-card footer { min-height: 70px; padding: 14px 19px 14px 27px; border-top: 1px solid #e7e4ee; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.payment-account-card footer .primary-action { min-height: 37px; padding: 0 12px; }
+.payment-account-card__link { padding: 0; border: 0; background: transparent; color: var(--violet); display: inline-flex; align-items: center; font-size: 9px; font-weight: 800; cursor: pointer; }
+.payment-account-card__link:hover { color: var(--violet-dark); text-decoration: underline; }
+.payment-history-card--compact { margin-top: 18px; padding: 20px 25px; }
+.payment-history-card--compact .section-heading { margin-bottom: 11px; }
+.payment-history-card--compact .section-heading h2 { font-size: 16px; }
+
+.payment-sheet--response { width: min(475px, 100%); min-height: 410px; padding: 32px; display: grid; place-items: center; }
+.payment-journey { width: 100%; max-width: 340px; text-align: center; }
+.payment-journey .journey-icon { position: static; width: 48px; height: 48px; margin: 0 auto 16px; border-radius: 50%; background: #efecff; color: #6755cb; display: grid; place-items: center; }
+.payment-journey .journey-icon.is-success { background: #e5f8ed; color: #267e58; }
+.payment-journey h2 { margin: 7px 0 9px; color: #3d384f; font-size: 23px; letter-spacing: -.035em; }
+.payment-journey > p:not(.eyebrow) { margin: 0; color: var(--ink-soft); font-size: 11px; line-height: 1.58; }
+.payment-journey .journey-details { margin: 21px 0 0; padding: 14px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 1fr 1fr; gap: 13px; text-align: left; }
+.payment-journey .journey-details > div:last-child { text-align: right; }
+.payment-journey__actions { margin-top: 20px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.payment-journey__actions .primary-action { min-height: 38px; padding: 0 12px; }
+.network-logo { width: 31px; height: 31px; overflow: hidden; border-radius: 7px; background: #fff; display: grid; place-items: center; flex: 0 0 auto; }
+.network-logo img { width: 100%; height: 100%; object-fit: contain; }
+.network-logo--mtn { border-radius: 50%; background: #ffcc00; }
+.network-logo--mtn img { mix-blend-mode: multiply; transform: scale(1.25); }
+.network-logo--airtel { background: #d71920; }
+.network-logo--airtel img { width: 85%; height: 85%; object-fit: contain; filter: brightness(0) invert(1); }
+
+@media (max-width: 680px) {
+  .dashboard-payment-summary { grid-template-columns: minmax(0, 1fr) auto; gap: 14px; }
+  .dashboard-payment-summary__amount { padding-left: 0; border-left: 0; text-align: right; }
+  .dashboard-payment-summary > button { grid-column: 1 / -1; width: 100%; justify-content: center; }
+  .payment-page { width: min(100% - 34px, 830px); padding-top: 31px; }
+  .payment-account-card__summary, .payment-account-card__detail { padding-right: 19px; padding-left: 19px; }
+  .payment-account-card footer { padding-right: 19px; padding-left: 19px; flex-direction: column; align-items: stretch; }
+  .payment-account-card footer .primary-action, .payment-account-card footer .quiet-action { width: 100%; }
+  .payment-account-card__link { min-height: 30px; justify-content: center; }
+}
+
+@media (max-width: 430px) {
+  .payment-account-card__summary { align-items: flex-start; }
+  .payment-account-card__summary em { display: none; }
+  .payment-journey__actions { align-items: stretch; flex-direction: column; }
+  .payment-journey__actions .primary-action, .payment-journey__actions .quiet-action { width: 100%; }
+}
+
 /* Standalone pathway registration — the calendar remains a separate personal tool. */
 .pathway-page--registration .pathway-hero { padding-bottom: 34px; }
 .planner-entry-copy { max-width: 690px; margin: 9px 0 0; color: var(--ink-soft); font-size: 11px; line-height: 1.6; }
