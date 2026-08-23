@@ -3,9 +3,13 @@ import { ArrowLeft, ArrowRight, Check, CircleHelp, Eye, EyeOff, LockKeyhole, Mai
 import { Navigate, useNavigate } from 'react-router-dom'
 
 import { authenticatePreview, getRoleStartPath, loadPreviewSession, startPreviewSession, type PreviewAccount } from '../auth'
-import { Brand, CircleMark } from '../components/Brand'
+import { CircleMark } from '../components/Brand'
 
 type SignInStage = 'identity' | 'password' | 'success' | 'help'
+
+function DeepFocusAccessMark() {
+  return <span className="deepfocus-access-mark" aria-hidden="true"><svg viewBox="0 0 48 48" focusable="false"><rect x="3" y="3" width="42" height="42" rx="13" fill="currentColor" /><path d="M12 25c0-7.7 5.35-13 12-13s12 5.3 12 13" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" /><path d="M15 28c2.7 4.8 6 7.2 9 7.2s6.3-2.4 9-7.2" fill="none" stroke="#9DE1D9" strokeWidth="3" strokeLinecap="round" /><circle cx="24" cy="24" r="4.6" fill="#F6C459" /></svg></span>
+}
 
 export function SignInPage() {
   const navigate = useNavigate()
@@ -52,7 +56,7 @@ export function SignInPage() {
   return (
     <main className="identity-page">
       <header className="identity-header">
-        <div className="identity-header__brand"><span className="identity-header__mark"><CircleMark light /></span><Brand /></div>
+        <div className="identity-header__brand"><DeepFocusAccessMark /><span className="identity-wordmark"><strong>DeepFocus</strong><small>revision</small></span></div>
         <button type="button" className="identity-help-link" onClick={() => setStage('help')}><CircleHelp size={18} /> Need help?</button>
       </header>
 

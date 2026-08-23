@@ -21,6 +21,12 @@ describe('preview authentication', () => {
     expect(getRoleStartPath(account!)).toBe('/instructor')
   })
 
+  it('supports the previously saved DeepFocus addresses during the sign-in transition', () => {
+    const account = authenticatePreview('amara.kato@deepfocus.preview', 'DeepFocus2026!')
+
+    expect(account).toMatchObject({ id: 'admin-amara', role: 'admin' })
+  })
+
   it('exposes the learner account without exposing a password', () => {
     const learner = getPreviewAccount('learner-fred')
 

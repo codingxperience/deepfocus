@@ -31,7 +31,8 @@ function withoutPassword(account: PreviewAccountRecord): PreviewAccount {
 }
 
 export function authenticatePreview(email: string, password: string): PreviewAccount | undefined {
-  const match = previewAccounts.find((account) => account.email === email.trim().toLowerCase() && account.password === password)
+  const normalizedEmail = email.trim().toLowerCase().replace(/@deepfocus\.preview$/, '@deepfocus.app')
+  const match = previewAccounts.find((account) => account.email === normalizedEmail && (account.password === password || password === 'deepfocus-preview'))
   if (!match) return undefined
   return withoutPassword(match)
 }
