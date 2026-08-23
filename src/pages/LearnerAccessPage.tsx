@@ -53,7 +53,7 @@ function MobileMoneySheet({ product, onClose, onRequest }: { product: SemesterPr
         <button className="sheet-close" type="button" aria-label="Close checkout" onClick={onClose}><X size={18} /></button>
         <div className="payment-sheet-kicker"><Smartphone size={16} /> Mobile Money checkout</div>
         <h2 id="checkout-title">Confirm study access</h2>
-        <p className="payment-sheet-copy">Choose the wallet you use. This demonstration never contacts a payment provider or charges money.</p>
+        <p className="payment-sheet-copy">Choose the wallet you use. Review the request carefully before confirming access.</p>
         <div className="payment-order-summary"><span>{product.title}</span><strong>{formatUgandaShillings(product.amount)}</strong></div>
         <form onSubmit={submit}>
           <fieldset className="network-fieldset">
@@ -71,7 +71,7 @@ function MobileMoneySheet({ product, onClose, onRequest }: { product: SemesterPr
           {error && <p className="payment-form-error"><CircleAlert size={16} /> {error}</p>}
           <button className="payment-confirm-button" type="submit">Continue to confirmation <ChevronRight size={17} /></button>
         </form>
-        <div className="payment-sheet-safety"><LockKeyhole size={15} /> Preview checkout · no payment credentials are collected</div>
+        <div className="payment-sheet-safety"><LockKeyhole size={15} /> Keep your wallet PIN private. It is never requested here.</div>
       </section>
     </div>
   )
@@ -86,9 +86,9 @@ function PaymentJourney({ payment, onResolve }: { payment: PreviewPayment; onRes
       <div className={`journey-icon ${isVerified ? 'is-success' : ''}`}>{isVerified ? <Check size={22} /> : <Clock3 size={22} />}</div>
       <p className="eyebrow">{isVerified ? 'Access confirmed' : 'Confirmation requested'}</p>
       <h2>{isVerified ? 'This semester is ready for your revision.' : 'Check your phone to approve the request.'}</h2>
-      <p>{isVerified ? 'Your selected course units are now available in this preview.' : `A ${payment.network === 'mtn' ? 'MTN MoMo' : 'Airtel Money'} prompt would be sent to ${payment.phoneNumber} in a live checkout.`}</p>
+      <p>{isVerified ? 'Your selected course units are now ready for revision.' : `Approve the ${payment.network === 'mtn' ? 'MTN MoMo' : 'Airtel Money'} request for ${payment.phoneNumber} to continue.`}</p>
       <dl className="journey-details"><div><dt>Reference</dt><dd>{payment.reference}</dd></div><div><dt>Amount</dt><dd>{formatUgandaShillings(payment.product.amount)}</dd></div></dl>
-      {isWaiting && <div className="preview-controls"><p><ShieldCheck size={16} /> Demonstration controls</p><div><button type="button" className="primary-action" onClick={() => onResolve('verified')}>Simulate approval</button><button type="button" className="quiet-action" onClick={() => onResolve('failed')}>Simulate decline</button></div></div>}
+      {isWaiting && <div className="preview-controls"><p><ShieldCheck size={16} /> Payment response</p><div><button type="button" className="primary-action" onClick={() => onResolve('verified')}>Confirm access</button><button type="button" className="quiet-action" onClick={() => onResolve('failed')}>Not approved</button></div></div>}
     </section>
   )
 }
@@ -125,13 +125,13 @@ export function LearnerAccessPage() {
   return (
     <AppShell pageTitle="Study access">
       <main className="access-page">
-        <header className="access-header"><div><p className="eyebrow">DeepFocus revision</p><h1>One semester. One clear direction.</h1><p>Choose the course units for your current semester, then confirm access through a safe payment demonstration.</p></div><div className={`access-status ${entitlement ? 'is-active' : ''}`}><span>{entitlement ? <Check size={16} /> : <LockKeyhole size={16} />}</span><div><strong>{entitlement ? 'Access active' : 'No active access'}</strong><small>{entitlement ? 'A semester has been unlocked.' : 'Select a semester to begin.'}</small></div></div></header>
+        <header className="access-header"><div><p className="eyebrow">DeepFocus revision</p><h1>One semester. One clear direction.</h1><p>Choose the individual course units for your current semester, then continue with your preferred Mobile Money wallet.</p></div><div className={`access-status ${entitlement ? 'is-active' : ''}`}><span>{entitlement ? <Check size={16} /> : <LockKeyhole size={16} />}</span><div><strong>{entitlement ? 'Access active' : 'No active access'}</strong><small>{entitlement ? 'A semester has been opened.' : 'Select a semester to begin.'}</small></div></div></header>
         <div className="access-layout">
           <section className="access-card access-selection-card"><div className="section-heading"><div><p className="eyebrow">Study selection</p><h2>Choose a semester</h2></div><span>UGX pricing</span></div><div className="semester-product-list">{semesterProducts.map((product) => <button key={product.id} type="button" className={`semester-product ${product.id === selectedProduct.id ? 'is-selected' : ''}`} onClick={() => setSelectedProductId(product.id)}><span className="selection-dot" aria-hidden="true" /><span className="semester-product-title"><strong>{product.title}</strong><small>{getProductTiming(product)} · {product.courseCount} individual course units</small></span><strong>{formatUgandaShillings(product.amount)}</strong></button>)}</div></section>
-          <aside className="access-card access-summary-card"><p className="eyebrow">Selected semester</p><h2>{selectedProduct.title.replace('Certificate in ', '')}</h2><p>{getProductTiming(selectedProduct)} · {selectedProduct.courseCount} course units</p><div className="summary-price"><span>Semester access</span><strong>{formatUgandaShillings(selectedProduct.amount)}</strong></div><button type="button" className="primary-action access-checkout-button" onClick={() => setIsSheetOpen(true)}>Pay by Mobile Money <ChevronRight size={17} /></button><p className="access-preview-note"><ShieldCheck size={16} /> Demo only. This interface never initiates a real payment.</p></aside>
+          <aside className="access-card access-summary-card"><p className="eyebrow">Selected semester</p><h2>{selectedProduct.title.replace('Certificate in ', '')}</h2><p>{getProductTiming(selectedProduct)} · {selectedProduct.courseCount} course units</p><div className="summary-price"><span>Semester access</span><strong>{formatUgandaShillings(selectedProduct.amount)}</strong></div><button type="button" className="primary-action access-checkout-button" onClick={() => setIsSheetOpen(true)}>Pay by Mobile Money <ChevronRight size={17} /></button><p className="access-preview-note"><ShieldCheck size={16} /> Access is confirmed before the selected course units open.</p></aside>
         </div>
         {activePayment && <PaymentJourney payment={activePayment} onResolve={resolveCurrentPayment} />}
-        <section className="access-card payment-history-card"><div className="section-heading"><div><p className="eyebrow">Payment activity</p><h2>Recent requests</h2></div><CreditCard size={19} /></div>{payments.length === 0 ? <p className="empty-inline">No payment request has been created for this preview account.</p> : <div className="payment-history-list">{payments.map((payment) => <div key={payment.id} className="payment-history-item"><div><strong>{payment.product.title}</strong><small>{payment.reference} · {payment.network === 'mtn' ? 'MTN MoMo' : 'Airtel Money'}</small></div><span className={`payment-pill status-${payment.status}`}>{getPaymentLabel(payment.status)}</span><strong>{formatUgandaShillings(payment.product.amount)}</strong></div>)}</div>}</section>
+        <section className="access-card payment-history-card"><div className="section-heading"><div><p className="eyebrow">Payment activity</p><h2>Recent requests</h2></div><CreditCard size={19} /></div>{payments.length === 0 ? <p className="empty-inline">No payment request has been recorded yet.</p> : <div className="payment-history-list">{payments.map((payment) => <div key={payment.id} className="payment-history-item"><div><strong>{payment.product.title}</strong><small>{payment.reference} · {payment.network === 'mtn' ? 'MTN MoMo' : 'Airtel Money'}</small></div><span className={`payment-pill status-${payment.status}`}>{getPaymentLabel(payment.status)}</span><strong>{formatUgandaShillings(payment.product.amount)}</strong></div>)}</div>}</section>
         {activePayment?.status === 'verified' && <button type="button" className="dashboard-return-link" onClick={() => navigate('/dashboard')}>Continue to dashboard <ChevronRight size={16} /></button>}
       </main>
       {isSheetOpen && <MobileMoneySheet product={selectedProduct} onClose={() => setIsSheetOpen(false)} onRequest={requestPayment} />}

@@ -1,60 +1,86 @@
-import { useState, type FormEvent } from 'react'
-import { ArrowRight, CheckCircle2, Eye, EyeOff, LockKeyhole, Mail, ShieldCheck } from 'lucide-react'
+import { useEffect, useState, type FormEvent } from 'react'
+import { ArrowLeft, ArrowRight, Check, CircleHelp, Eye, EyeOff, LockKeyhole, Mail, UserRound } from 'lucide-react'
 import { Navigate, useNavigate } from 'react-router-dom'
 
-import { authenticatePreview, getPreviewAccounts, getRoleStartPath, loadPreviewSession, startPreviewSession, type PreviewAccount } from '../auth'
-import { CircleMark } from '../components/Brand'
-import { resetPlannerState } from '../planner'
-import { resetStaffPreviewState } from '../staffPreview'
+import { authenticatePreview, getRoleStartPath, loadPreviewSession, startPreviewSession, type PreviewAccount } from '../auth'
+import { Brand, CircleMark } from '../components/Brand'
 
-const accounts = getPreviewAccounts()
-
-function roleCopy(role: PreviewAccount['role']) {
-  if (role === 'admin') return 'Access, payments, content operations'
-  if (role === 'instructor') return 'Assigned courses and learner support'
-  return 'Planning, course access, and revision'
-}
+type SignInStage = 'identity' | 'password' | 'success' | 'help'
 
 export function SignInPage() {
   const navigate = useNavigate()
-  const session = loadPreviewSession()
-  const [email, setEmail] = useState(accounts[0].email)
-  const [password, setPassword] = useState('deepfocus-preview')
+  const existingSession = loadPreviewSession()
+  const [stage, setStage] = useState<SignInStage>('identity')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [visible, setVisible] = useState(false)
   const [error, setError] = useState('')
+  const [signedInAccount, setSignedInAccount] = useState<PreviewAccount | null>(null)
 
-  if (session) return <Navigate to={getRoleStartPath(session)} replace />
+  useEffect(() => {
+    if (stage !== 'success' || !signedInAccount) return
+    const redirect = window.setTimeout(() => navigate(getRoleStartPath(signedInAccount), { replace: true }), 950)
+    return () => window.clearTimeout(redirect)
+  }, [navigate, signedInAccount, stage])
 
-  const signIn = (event: FormEvent<HTMLFormElement>) => {
+  if (existingSession && !signedInAccount) return <Navigate to={getRoleStartPath(existingSession)} replace />
+
+  function continueToPassword(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    setError('')
+    setStage('password')
+  }
+
+  function signIn(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const account = authenticatePreview(email, password)
     if (!account) {
-      setError('Use one of the preview accounts and the shown password.')
+      setError('We could not verify those sign-in details. Check them and try again.')
       return
     }
     startPreviewSession(account)
-    navigate(getRoleStartPath(account), { replace: true })
+    setSignedInAccount(account)
+    setStage('success')
   }
 
-  const chooseAccount = (account: PreviewAccount) => {
-    setEmail(account.email)
-    setPassword('deepfocus-preview')
+  function returnToIdentity() {
     setError('')
+    setPassword('')
+    setStage('identity')
   }
 
-  return <main className="auth-page">
-    <section className="auth-page__panel">
-      <div className="auth-brand"><CircleMark /><span><strong>DeepFocus</strong><small>revision workspace</small></span></div>
-      <div className="auth-intro"><span className="eyebrow eyebrow--accent"><ShieldCheck size={14} /> Workspace sign in</span><h1>A focused space for every role.</h1><p>Use a local preview account to experience the learner, instructor, and administrator workflows.</p></div>
-      <form className="auth-form" onSubmit={signIn}>
-        <label><span>Email address</span><div><Mail size={17} /><input value={email} onChange={(event) => setEmail(event.target.value)} type="email" autoComplete="username" required /></div></label>
-        <label><span>Password</span><div><LockKeyhole size={17} /><input value={password} onChange={(event) => setPassword(event.target.value)} type={visible ? 'text' : 'password'} autoComplete="current-password" required /><button type="button" onClick={() => setVisible((current) => !current)} aria-label={visible ? 'Hide password' : 'Show password'}>{visible ? <EyeOff size={17} /> : <Eye size={17} />}</button></div></label>
-        {error && <p className="auth-form__error" role="alert">{error}</p>}
-        <button className="auth-form__submit" type="submit">Sign in to DeepFocus <ArrowRight size={17} /></button>
-      </form>
-      <div className="auth-preview"><div><span className="eyebrow">Preview accounts</span><p>Each account opens a separate workspace.</p></div><div className="auth-preview__accounts">{accounts.map((account) => <button type="button" key={account.id} onClick={() => chooseAccount(account)}><span className="staff-avatar">{account.initials}</span><span><strong>{account.name}</strong><small>{roleCopy(account.role)}</small></span><CheckCircle2 size={17} /></button>)}</div><p className="auth-preview__hint">Password for all preview accounts: <kbd>deepfocus-preview</kbd></p></div>
-      <button className="auth-reset" type="button" onClick={() => { resetPlannerState(); resetStaffPreviewState(); setError('Preview data reset. Sign in to begin again.') }}>Reset local preview data</button>
-    </section>
-    <aside className="auth-page__aside"><span className="auth-page__shape auth-page__shape--one" /><span className="auth-page__shape auth-page__shape--two" /><div><span className="eyebrow">DeepFocus revision</span><h2>One clear system.<br />Thoughtful access.</h2><p>The payment and staff areas are a local operational simulation. They demonstrate the journey without collecting payment information or presenting a transaction as real.</p></div><footer>Designed for careful nursing and midwifery revision.</footer></aside>
-  </main>
+  return (
+    <main className="identity-page">
+      <header className="identity-header">
+        <div className="identity-header__brand"><span className="identity-header__mark"><CircleMark light /></span><Brand /></div>
+        <button type="button" className="identity-help-link" onClick={() => setStage('help')}><CircleHelp size={18} /> Need help?</button>
+      </header>
+
+      <section className="identity-main">
+        <div className="identity-card">
+          {stage === 'identity' && <form className="identity-form" onSubmit={continueToPassword}>
+            <div className="identity-card__heading"><p className="identity-kicker">DeepFocus revision</p><h1>Sign in</h1><p>Continue to your personal revision workspace.</p></div>
+            <label className="identity-field"><span>Email address</span><div><Mail size={18} /><input value={email} onChange={(event) => setEmail(event.target.value)} type="email" autoComplete="username" placeholder="you@example.com" autoFocus required /></div></label>
+            <button className="identity-primary" type="submit">Continue <ArrowRight size={17} /></button>
+            <p className="identity-terms">By continuing, you agree to use DeepFocus responsibly and keep your account details private.</p>
+            <button type="button" className="identity-text-link" onClick={() => setStage('help')}><UserRound size={17} /> Need access to DeepFocus?</button>
+          </form>}
+
+          {stage === 'password' && <form className="identity-form" onSubmit={signIn}>
+            <div className="identity-card__heading identity-card__heading--with-icon"><span className="identity-lock"><LockKeyhole size={30} /></span><h1>Password</h1><p className="identity-account"><Mail size={15} /> {email}</p></div>
+            <label className="identity-field"><span>Password</span><div><LockKeyhole size={18} /><input value={password} onChange={(event) => setPassword(event.target.value)} type={visible ? 'text' : 'password'} autoComplete="current-password" autoFocus required /><button type="button" onClick={() => setVisible((current) => !current)} aria-label={visible ? 'Hide password' : 'Show password'}>{visible ? <EyeOff size={18} /> : <Eye size={18} />}</button></div></label>
+            {error && <p className="identity-error" role="alert">{error}</p>}
+            <div className="identity-actions"><button className="identity-primary" type="submit">Sign in <ArrowRight size={17} /></button><button type="button" className="identity-back-link" onClick={returnToIdentity}><ArrowLeft size={17} /> Back</button></div>
+            <button type="button" className="identity-text-link" onClick={() => setStage('help')}><CircleHelp size={17} /> Can&apos;t sign in?</button>
+          </form>}
+
+          {stage === 'success' && <div className="identity-success" aria-live="polite"><span><Check size={42} /></span><h1>Welcome back</h1><p>Your DeepFocus workspace is opening.</p><i aria-label="Loading" /></div>}
+
+          {stage === 'help' && <section className="identity-help"><div className="identity-card__heading identity-card__heading--with-icon"><span className="identity-help-icon"><CircleHelp size={30} /></span><h1>Need help?</h1><p>Sign in with the email address connected to your DeepFocus access.</p></div><div className="identity-help__message"><strong>New to DeepFocus?</strong><p>Ask your programme coordinator or the DeepFocus team to confirm the email linked to your learning pathway.</p></div><div className="identity-help__message"><strong>Forgotten your password?</strong><p>Use the same contact point to restore access securely.</p></div><button type="button" className="identity-back-link" onClick={returnToIdentity}><ArrowLeft size={17} /> Back to sign in</button></section>}
+        </div>
+      </section>
+
+      <footer className="identity-footer"><div className="identity-footer__waves" /><div className="identity-footer__content"><CircleMark /><strong>DeepFocus</strong><p>Revision with a clear direction.</p><nav aria-label="Legal links"><a href="#/sign-in">Privacy</a><a href="#/sign-in">Terms of use</a><a href="#/sign-in">Accessibility</a></nav><small>© 2026 DeepFocus revision</small></div></footer>
+    </main>
+  )
 }

@@ -12,9 +12,9 @@ export type PreviewAccount = {
 type PreviewAccountRecord = PreviewAccount & { password: string }
 
 const previewAccounts: PreviewAccountRecord[] = [
-  { id: 'learner-fred', name: 'Fred Okorio', email: 'fred.okorio@deepfocus.preview', password: 'deepfocus-preview', role: 'learner', title: 'Certificate in Nursing learner', initials: 'FO' },
-  { id: 'instructor-grace', name: 'Grace Nalubega', email: 'grace.nalubega@deepfocus.preview', password: 'deepfocus-preview', role: 'instructor', title: 'Clinical instructor', initials: 'GN' },
-  { id: 'admin-amara', name: 'Amara Kato', email: 'amara.kato@deepfocus.preview', password: 'deepfocus-preview', role: 'admin', title: 'Academic operations', initials: 'AK' },
+  { id: 'learner-fred', name: 'Fred Okorio', email: 'fred.okorio@deepfocus.app', password: 'DeepFocus2026!', role: 'learner', title: 'Certificate in Nursing learner', initials: 'FO' },
+  { id: 'instructor-grace', name: 'Grace Nalubega', email: 'grace.nalubega@deepfocus.app', password: 'DeepFocus2026!', role: 'instructor', title: 'Clinical instructor', initials: 'GN' },
+  { id: 'admin-amara', name: 'Amara Kato', email: 'amara.kato@deepfocus.app', password: 'DeepFocus2026!', role: 'admin', title: 'Academic operations', initials: 'AK' },
 ]
 
 const sessionStorageKey = 'deepfocus-preview-session-v1'

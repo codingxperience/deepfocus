@@ -1599,7 +1599,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   .help-page__map { width: 120px; height: 104px; }
 }
 
-/* Preview roles, payment simulation, and staff workspaces */
+/* Role-based staff and payment workspaces */
 .auth-page { min-height: 100vh; background: #f6f5fb; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(360px, .95fr); }
 .auth-page__panel { width: min(520px, calc(100% - 64px)); margin: 0 auto; padding: 54px 0; display: flex; flex-direction: column; justify-content: center; }
 .auth-brand { display: flex; align-items: center; gap: 11px; margin-bottom: 72px; }
@@ -2424,4 +2424,82 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   .degree-gate { grid-template-columns: 20px minmax(0, 1fr); }
   .degree-gate button { grid-column: 2; }
   .degree-registration-gate { padding: 36px 8px; }
+}
+
+/* DeepFocus access journey */
+.identity-page { min-height: 100vh; background: #fff; color: #282641; display: flex; flex-direction: column; }
+.identity-header { min-height: 74px; border-bottom: 1px solid #e4e6eb; display: flex; align-items: center; justify-content: space-between; }
+.identity-header__brand { height: 74px; display: flex; align-items: center; }
+.identity-header__mark { width: 74px; height: 74px; margin-right: 22px; background: linear-gradient(130deg, #29245d 0 55%, #6759c5 55% 100%); color: #fff; display: grid; place-items: center; clip-path: polygon(0 0, 74% 0, 100% 100%, 0 100%); }
+.identity-header__mark .circle-mark { width: 38px; height: 38px; }
+.identity-header__brand .brand { gap: 10px; color: #292641; }
+.identity-header__brand .brand .circle-mark { display: none; }
+.identity-header__brand .brand__type { gap: 1px; }
+.identity-header__brand .brand strong { font-family: 'Manrope', sans-serif; font-size: 17px; letter-spacing: -.04em; }
+.identity-header__brand .brand__type span { color: #6b687a; font-size: 8px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+.identity-help-link { min-height: 74px; padding: 0 28px; border: 0; border-left: 1px solid #edf0f3; background: transparent; color: #49445f; display: inline-flex; align-items: center; gap: 8px; font: inherit; font-size: 12px; cursor: pointer; }
+.identity-help-link:hover { color: #5d4ec5; background: #fafaff; }
+.identity-main { flex: 1 0 auto; min-height: 590px; padding: 64px 24px 76px; display: grid; place-items: center; }
+.identity-card { width: min(428px, 100%); min-height: 422px; padding: 46px 40px 38px; border: 1px solid #dfe2e8; background: #fff; box-shadow: 0 3px 5px rgba(33, 31, 53, .08), 0 14px 28px rgba(33, 31, 53, .05); }
+.identity-form, .identity-help { display: flex; min-height: 338px; flex-direction: column; }
+.identity-card__heading { margin-bottom: 28px; text-align: center; }
+.identity-card__heading h1 { margin: 3px 0 10px; color: #292641; font-family: 'Manrope', sans-serif; font-size: 28px; font-weight: 500; letter-spacing: -.045em; }
+.identity-card__heading > p:not(.identity-kicker):not(.identity-account) { max-width: 255px; margin: 0 auto; color: #69667a; font-size: 12px; line-height: 1.55; }
+.identity-kicker { margin: 0; color: #6555c7; font-size: 9px; font-weight: 900; letter-spacing: .11em; text-transform: uppercase; }
+.identity-card__heading--with-icon { margin-bottom: 26px; }
+.identity-lock, .identity-help-icon { width: 54px; height: 54px; margin: -9px auto 14px; border-radius: 50%; background: #f0eefb; color: #5c4ec5; display: grid; place-items: center; }
+.identity-help-icon { background: #edf8f8; color: #297f80; }
+.identity-account { margin: 0; color: #5d5872; display: inline-flex; align-items: center; gap: 6px; font-size: 12px; }
+.identity-field { display: block; }
+.identity-field > span { margin-bottom: 7px; color: #403c55; display: block; font-size: 11px; font-weight: 800; }
+.identity-field > div { min-height: 46px; border: 1px solid #aeb3bd; background: #fff; color: #777389; display: flex; align-items: center; transition: border-color .2s, box-shadow .2s; }
+.identity-field > div:focus-within { border-color: #6454c9; box-shadow: 0 0 0 3px rgba(100, 84, 201, .11); }
+.identity-field svg { margin-left: 13px; flex: 0 0 auto; }
+.identity-field input { width: 100%; height: 44px; padding: 0 12px; border: 0; outline: none; background: transparent; color: #282641; font: inherit; font-size: 13px; }
+.identity-field input::placeholder { color: #a7a5b1; }
+.identity-field button { width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: #4f4a61; display: grid; place-items: center; cursor: pointer; }
+.identity-field button svg { margin: 0; }
+.identity-primary { min-height: 42px; margin-top: 20px; padding: 0 15px; border: 1px solid #5546bb; border-radius: 3px; background: #5c4ec5; color: #fff; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font: inherit; font-size: 12px; font-weight: 800; cursor: pointer; transition: background .2s, transform .2s; }
+.identity-primary:hover { background: #4e40b3; transform: translateY(-1px); }
+.identity-terms { max-width: 290px; margin: 22px 0 0; color: #5f5b70; font-size: 10px; line-height: 1.55; }
+.identity-text-link, .identity-back-link { width: fit-content; padding: 0; border: 0; background: transparent; color: #386b94; display: inline-flex; align-items: center; gap: 7px; font: inherit; font-size: 12px; cursor: pointer; }
+.identity-text-link { margin-top: auto; }
+.identity-text-link:hover, .identity-back-link:hover { color: #5546bb; text-decoration: underline; }
+.identity-actions { display: flex; align-items: center; gap: 20px; }
+.identity-actions .identity-primary { min-width: 120px; }
+.identity-error { margin: 11px 0 -2px; color: #af3f54; font-size: 10px; line-height: 1.45; }
+.identity-success { min-height: 338px; display: flex; align-items: center; flex-direction: column; justify-content: center; text-align: center; }
+.identity-success > span { width: 64px; height: 64px; margin-bottom: 21px; border-radius: 50%; background: #2e9954; color: #fff; display: grid; place-items: center; }
+.identity-success h1 { margin: 0; color: #292641; font-family: 'Manrope', sans-serif; font-size: 28px; font-weight: 500; letter-spacing: -.045em; }
+.identity-success p { max-width: 260px; margin: 13px 0 32px; color: #625e73; font-size: 13px; line-height: 1.55; }
+.identity-success i { width: 28px; height: 28px; border: 4px solid #e1dfee; border-top-color: #6254c5; border-radius: 50%; animation: identity-spin .75s linear infinite; }
+.identity-help__message { margin: 0 0 18px; padding: 0 0 17px; border-bottom: 1px solid #e6e7eb; }
+.identity-help__message strong { color: #39364d; font-size: 12px; }
+.identity-help__message p { margin: 6px 0 0; color: #69667a; font-size: 11px; line-height: 1.55; }
+.identity-help .identity-back-link { margin-top: auto; }
+.identity-footer { position: relative; min-height: 260px; overflow: hidden; background: #f7f8fa; display: grid; place-items: center; }
+.identity-footer__waves { position: absolute; inset: 0; overflow: hidden; }
+.identity-footer__waves::before, .identity-footer__waves::after { position: absolute; content: ''; width: 110%; height: 170px; left: -5%; background: rgba(228, 229, 236, .55); transform: rotate(-6deg); }
+.identity-footer__waves::before { bottom: -98px; }
+.identity-footer__waves::after { bottom: -130px; background: rgba(238, 239, 243, .9); transform: rotate(5deg); }
+.identity-footer__content { position: relative; z-index: 1; padding-top: 24px; color: #464257; display: flex; align-items: center; flex-direction: column; text-align: center; }
+.identity-footer__content .circle-mark { width: 39px; height: 39px; margin-bottom: 7px; color: #2c285e; }
+.identity-footer__content > strong { color: #292641; font-family: 'Manrope', sans-serif; font-size: 13px; letter-spacing: -.03em; }
+.identity-footer__content > p { margin: 4px 0 19px; color: #777487; font-size: 9px; }
+.identity-footer nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 0 15px; }
+.identity-footer nav a, .identity-footer small { color: #565269; font-size: 9px; text-decoration: none; }
+.identity-footer nav a:hover { color: #5b4dc0; text-decoration: underline; }
+.identity-footer small { margin-top: 14px; color: #777487; }
+@keyframes identity-spin { to { transform: rotate(360deg); } }
+@media (max-width: 600px) {
+  .identity-header__mark { width: 58px; height: 64px; margin-right: 13px; }
+  .identity-header__mark .circle-mark { transform: scale(.86); }
+  .identity-header, .identity-header__brand, .identity-help-link { min-height: 64px; }
+  .identity-header__brand .brand strong { font-size: 15px; }
+  .identity-help-link { padding: 0 16px; font-size: 0; }
+  .identity-help-link svg { width: 20px; height: 20px; }
+  .identity-main { min-height: 510px; padding: 34px 16px 46px; }
+  .identity-card { min-height: 398px; padding: 34px 25px 30px; }
+  .identity-form, .identity-help, .identity-success { min-height: 320px; }
+  .identity-footer { min-height: 220px; }
 }

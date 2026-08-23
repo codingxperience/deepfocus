@@ -15,7 +15,7 @@ import {
 
 describe('preview authentication', () => {
   it('routes an authenticated instructor to the instructor workspace', () => {
-    const account = authenticatePreview('grace.nalubega@deepfocus.preview', 'deepfocus-preview')
+    const account = authenticatePreview('grace.nalubega@deepfocus.app', 'DeepFocus2026!')
 
     expect(account?.role).toBe('instructor')
     expect(getRoleStartPath(account!)).toBe('/instructor')
@@ -29,7 +29,7 @@ describe('preview authentication', () => {
   })
 })
 
-describe('mobile money payment simulation', () => {
+describe('mobile money payment workflow', () => {
   it('creates access only after a payment has been verified', () => {
     const requested = createPaymentRequest(createStaffPreviewState(), {
       accountId: 'learner-fred',
