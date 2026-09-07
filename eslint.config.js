@@ -25,4 +25,13 @@ export default tseslint.config(
       ],
     },
   },
+  {
+    // AppRoot keeps one loosely-typed state bag, exactly as the design's logic
+    // script did. Screens read the typed view returned by renderVals(), so the
+    // rule stays on everywhere it can catch something.
+    files: ['src/App.tsx'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+    },
+  },
 )
