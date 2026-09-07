@@ -1,47 +1,88 @@
-# DeepFocus revision
+# Deep Focus · Nurse's and Midwives Revision
 
-A responsive revision frontend for Certificate in Nursing and Certificate in Midwifery learners, built from supplied course outlines, visual references, and clearly attributed public curriculum references.
+A revision workspace for Ugandan nursing and midwifery certificate students, their
+instructors, and the registry that clears them. The address you sign in with decides
+the desk you land on — there is no role menu.
+
+| Domain | Desk |
+| --- | --- |
+| `@student.deepfocus.ug` | Learner — courses, week sheets, grades, payment, inbox |
+| `@staff.deepfocus.ug` | Instructor — marking, course maps, publishing, learners, the gathering |
+| `@admin.deepfocus.ug` | Registry — decisions queue, money, people, structure, audit log |
 
 ## Live site
 
-[Open DeepFocus revision](https://codingxperience.github.io/deepfocus/)
+[Open Deep Focus](https://codingxperience.github.io/deepfocus/)
+
+GitHub Pages serves the production output from the `gh-pages` branch, so `vite.config.ts`
+keeps `base: './'` and every built asset path stays relative to `/deepfocus/`.
 
 ## Run locally
 
 ```bash
 npm install
-npm run dev
+npm run dev        # http://127.0.0.1:4173/
 ```
-
-The local app is available at `http://127.0.0.1:4173/`.
 
 ## Quality checks
 
 ```bash
 npm run lint
+npm run typecheck
 npm run build
 ```
 
-GitHub Pages serves the production output from the `gh-pages` branch. This
-branch-based deployment avoids requiring a GitHub Actions runner.
+## How this repository is laid out
 
-## Product scope
+```
+index.html            document shell + the two web fonts
+src/main.tsx          mounts <AppRoot>
+src/App.tsx           AppRoot — all state, all behaviour, and renderVals()
+src/data.ts           the fixed content: pathways, course outlines, week sheets,
+                      sources, people, payments, icons
+src/Screens.tsx       sign-in, onboarding, and the app shell (rail, tabs, panel)
+src/pages/*.tsx       one component per route, rendered by the shell
+src/view.ts           the View type: what every screen renders against
+src/styles/           the global stylesheet and the hover/focus states
+public/assets/        photographs and course covers
+design/               the Claude Design source this was built from, and the
+                      conversations behind it
+docs/                 production access and enrolment notes
+```
 
-- The dashboard is a deliberately calm, current-semester study space: one current-semester line and a recent-study list containing only the learner's saved detailed maps for that semester.
-- New learners receive a DeepFocus-branded planning welcome rather than an empty copy of a third-party learning-management dashboard.
-- Every supplied nursing course has a weekly module path drawn from its supplied outline.
-- The standalone Study Pathway Planner provides a five-semester view of 28 Nursing and 28 Midwifery selectable revision courses. Where a published outline line names more than one subject, DeepFocus keeps the original outline code while allowing each named subject to be selected separately; it never invents a school code.
-- Learners can start at Year 1 Semester 1 or set a later entry point, record already-cleared earlier semesters, choose a personal revision rhythm, and register individual courses in their private DeepFocus study space. Semester 1 is labelled February–June and Semester 2 July–December; the most recently saved semester becomes the dashboard study semester.
-- The calendar remains a separate personal focus-block tool. It is not replaced by the pathway planner.
-- Progression clearance and registration are browser-only DeepFocus planning records. They are deliberately labelled as such: they do not award credit, enrol a learner with a school, or claim an official institutional prerequisite decision.
-- Module completion, recent history, accessibility choices, and personal calendar blocks are local browser-only preview state.
-- The account space includes a study vault, private notes, local notice preferences, accessible display controls, safe device-link sharing, and capability updates.
-- Inbox and calendar views are fully interactive interface previews; they do not send messages or create institutional deadlines.
-- No unsupported lesson material, external teacher identity, deadlines, academic progress, or official registration action is fabricated. Course listings, formal prerequisites, and official progression decisions should always be confirmed with the learner's school or assessment body.
+`AppRoot.renderVals()` builds one flat object — the **view** — holding every string,
+colour, column template and handler a screen needs. Screens read that object and
+nothing else, so all logic lives in one place and the pages stay declarative. `View` is
+the inferred return type of `renderVals()`, so a screen that reads a field the model
+does not produce fails the typecheck.
 
-## Taking DeepFocus to production
+## Where this came from
 
-The GitHub Pages frontend is intentionally not presented as a payment, authentication,
-or official-registration system. See [the production access and enrolment design](docs/production-access.md)
-for the required entitlement architecture, account-abuse controls, later-entry clearance
-review, and the product model for the February–June and July–December academic semesters.
+`src/` is a port of `design/DeepFocus v9.dc.html`, the design published from Claude
+Design, and is meant to match it screen for screen. It replaced the earlier planner
+build (`auth.ts`, `curriculum.ts`, `planner.ts`, `staffPreview.ts`, `components/`, and
+the twelve pages beside them), which is still in the git history.
+
+The port was checked by driving the design file and this build through the same
+journeys and diffing every screenshot: the screens match to the pixel, apart from the
+live payment clock and one button where the design tool wrapped an interpolated value
+in a span, giving it the flex container's 9px gap.
+
+Rules the design settles, which the code keeps:
+
+- Nothing is invented. Course codes, outlines, references and amounts come from the
+  published sources; totals are computed from rows rather than written down.
+- Sources are real and free: Open RN *Nursing Pharmacology 2e* (CC BY 4.0), OpenStax,
+  Uganda Clinical Guidelines 2023, the WHO essential medicines list, DailyMed.
+- Only courses with an authored map show weeks. The rest read "Not published".
+- Grades never estimate. Until something is marked, the page says so.
+- The semester charge is UGX 58,000, payable by MTN or Airtel wallet prompt, or by
+  bank deposit that a person in the registry matches against a statement.
+
+## Preview data
+
+Sign-in accepts any password. The four seeded addresses are listed on the sign-in page:
+Fred Okorio (set up and paid), Moses Ssekandi (first sign-in, walks the onboarding),
+Grace Nalubega (instructor), Amara Kato (registry). State lives in memory only — no
+registration, credit or result is created here. `docs/production-access.md` sets out
+what has to change before any of it can carry a real payment or a real result.

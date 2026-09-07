@@ -1,0 +1,44 @@
+.fc0:focus {
+  border-color: #1b1e2b !important;
+  box-shadow: 0 0 0 3px rgba(27,30,43,0.08) !important;
+}
+
+.hv1:hover {
+  background: #000 !important;
+}
+
+.hv2:hover {
+  background: #f7f9fa !important;
+}
+
+.hv3:hover {
+  border-color: #1b1e2b !important;
+}
+
+.hv4:hover {
+  color: #14171c !important;
+}
+
+.hv5:hover {
+  color: #fff !important;
+}
+
+.hv6:hover {
+  border-color: #d3dae1 !important;
+}
+
+.hv7:hover {
+  text-decoration: underline !important;
+}
+
+.hv8:hover {
+  background: #eef1f4 !important;
+}
+
+.fc9:focus {
+  border-color: #1b1e2b !important;
+}
+
+.hv10:hover {
+  background: #f3f0ea !important;
+}
